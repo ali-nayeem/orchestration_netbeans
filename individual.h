@@ -107,7 +107,7 @@ public:
     double avgLoad()
     {
         return avg;
-    }
+        }
     double stdDevLoad()
     {
         return stdDev;
