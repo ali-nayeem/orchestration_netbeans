@@ -65,7 +65,7 @@ public:
     {
         return "Mapping";
     }
-  
+
     double findMinMax()
     {
         double max, min, sum;
@@ -86,10 +86,10 @@ public:
                     minPointer = i;
                 }
             }
-            
+
             sum = sum + load[i];
         }
-        avg = sum/(1.0*PROCESSORS);
+        avg = sum / (1.0 * PROCESSORS);
         stdDev = standardDeviation(avg);
         return max;
     }
@@ -103,27 +103,29 @@ public:
         }
         return maxPointer;
     }
-    
+
     double avgLoad()
     {
         return avg;
-        }
+    }
+
     double stdDevLoad()
     {
         return stdDev;
     }
+
     double standardDeviation(double _avg)
     {
         double stdDeviation = 0.0;
         double stdSum = 0.0;
         for (int i = 1; i < PROCESSORS; i++)
         {
-            stdSum += pow(load[i]-_avg, 2.0);
+            stdSum += pow(load[i] - _avg, 2.0);
         }
-        stdDeviation = pow((stdSum/(1.0*PROCESSORS)), 0.5);
+        stdDeviation = pow((stdSum / (1.0 * PROCESSORS)), 0.5);
         return stdDeviation;
     }
-    
+
     unsigned assignActor(unsigned _actor, unsigned _newProcessor)
     {
         unsigned oldProcessor = actor2processor[_actor];

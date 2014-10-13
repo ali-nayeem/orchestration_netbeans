@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=orchestration_netbeans
+PROJECTNAME=orchestration
 
 # Active Configuration
 DEFAULTCONF=Debug
