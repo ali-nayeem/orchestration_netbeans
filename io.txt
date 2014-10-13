@@ -1,0 +1,2 @@
+input small_graph.txt
+map mapping.csv

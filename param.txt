@@ -1,0 +1,4 @@
+pSwap 0.4
+pMut 0.1
+rExploit 0.6
+maxGen 300

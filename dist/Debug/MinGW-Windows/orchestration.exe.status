@@ -1,0 +1,31 @@
+
+### GENERAL ########################################################################
+# --help=0                                 # -h : Prints this message
+# --stopOnUnknownParam=1                   # Stop if unkown param entered
+# --seed=1412653122                        # -S : Random number seed
+# --tSize=10                               # -T : Tournament size
+
+### EVOLUTION ENGINE ###############################################################
+# --popSize=10                             # -P : Population size
+
+### GENETIC OPERATORS ##############################################################
+# --pCross=0.6                             # -C : Probability of Crossover
+# --pMut=0.1                               # -M : Probability of Mutation
+# --onePointRate=1                         # -1 : Relative rate for one point crossover
+# --twoPointRate=1                         # -2 : Relative rate for two point crossover
+# --uRate=2                                # -U : Relative rate for uniform crossover
+# --pMutPerBit=0.01                        # -b : Probability of flipping 1 bit in bit-flip mutation
+# --bitFlipRate=0.01                       # -B : Relative rate for bit-flip mutation
+# --oneBitRate=0.01                        # -D : Relative rate for deterministic bit-flip mutation
+
+### PERSISTENCE ####################################################################
+# --Load=                                  # -L : A save file to restart from
+# --status=C:\Users\user\Documents\NetBeansProjects\orchestration\dist\Debug\MinGW-Windows\orchestration.exe.status # -S : Status file
+
+### REPRESENTATION #################################################################
+# --vecSize=8                              # -V : Genotype size
+
+### STOPPING CRITERION #############################################################
+# --maxGen=100                             # -G : Maximum number of generations
+# --minGen=100                             # -g : Minimum number of generations
+# --steadyGen=100                          # -s : Number of generations with no improvement
