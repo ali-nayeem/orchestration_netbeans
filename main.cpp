@@ -38,7 +38,7 @@ void main_function(int argc, char **argv)
 
     //initial solution
     Indi inialSolution;
-    fullyRandom(inialSolution);
+    fairRandom(inialSolution);
     eval(inialSolution);
 
     //tweaks
