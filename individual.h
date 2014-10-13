@@ -12,7 +12,6 @@
 #include<cstring>
 #include<math.h>
 
-#include "data_collection.h"
 
 
 
@@ -107,7 +106,7 @@ public:
         double sum = 0.0;
         for (int i = 1; i < PROCESSORS; i++)
         {
-            sum+ = load[i];
+            sum = sum + load[i];
         }
         
         return sum/(1.0*PROCESSORS);
@@ -119,7 +118,7 @@ public:
         double std_sum = 0.0;
         for (int i = 1; i < PROCESSORS; i++)
         {
-            std_sum+ = pow(load[i]-average, 2.0);
+            std_sum = std_sum + pow(load[i]-average, 2.0);
         }
         std_deviation = pow((std_sum/(1.0*PROCESSORS)), 0.5);
         return std_deviation;

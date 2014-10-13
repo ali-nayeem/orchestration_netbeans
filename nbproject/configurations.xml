@@ -4,18 +4,19 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>C:/Users/user/Documents/NetBeansProjects/orchestration/data_collection.h</itemPath>
-      <itemPath>C:/Users/user/Documents/NetBeansProjects/orchestration/fitness_evaluation.h</itemPath>
-      <itemPath>C:/Users/user/Documents/NetBeansProjects/orchestration/hill_climbing.h</itemPath>
-      <itemPath>C:/Users/user/Documents/NetBeansProjects/orchestration/individual.h</itemPath>
-      <itemPath>C:/Users/user/Documents/NetBeansProjects/orchestration/initialization.h</itemPath>
-      <itemPath>C:/Users/user/Documents/NetBeansProjects/orchestration/tweak.h</itemPath>
+      <itemPath>data_collection.h</itemPath>
+      <itemPath>fitness_evaluation.h</itemPath>
+      <itemPath>hill_climbing.h</itemPath>
+      <itemPath>individual.h</itemPath>
+      <itemPath>initialization.h</itemPath>
+      <itemPath>tweak.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
-      <itemPath>C:/Users/user/Documents/NetBeansProjects/orchestration/io.txt</itemPath>
-      <itemPath>C:/Users/user/Documents/NetBeansProjects/orchestration/param.txt</itemPath>
+      <itemPath>io.txt</itemPath>
+      <itemPath>param.txt</itemPath>
+      <itemPath>small_graph.txt</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -65,47 +66,25 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/data_collection.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="data_collection.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/fitness_evaluation.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="fitness_evaluation.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/hill_climbing.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="hill_climbing.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/individual.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="individual.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/initialization.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="initialization.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/io.txt"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/param.txt"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/tweak.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="io.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="param.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="small_graph.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tweak.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -128,47 +107,25 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/data_collection.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="data_collection.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/fitness_evaluation.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="fitness_evaluation.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/hill_climbing.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="hill_climbing.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/individual.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="individual.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/initialization.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="initialization.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/io.txt"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/param.txt"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
-      <item path="C:/Users/user/Documents/NetBeansProjects/orchestration/tweak.h"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="io.txt" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="param.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="small_graph.txt" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tweak.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
