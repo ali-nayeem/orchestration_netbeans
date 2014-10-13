@@ -12,7 +12,6 @@
 #include<cstring>
 #include<math.h>
 
-#include "data_collection.h"
 
 
 
@@ -69,8 +68,8 @@ public:
   
     double findMinMax()
     {
-        double max, min, sum = 0;
-        max = min = load[0];
+        double max, min, sum;
+        sum = max = min = load[0];
         maxPointer = minPointer = 0;
         for (int i = 1; i < PROCESSORS; i++) //we also calculate avg here
         {
@@ -105,7 +104,7 @@ public:
         return maxPointer;
     }
     
-    double averageLoad()
+    double avgLoad()
     {
         return avg;
     }
@@ -119,7 +118,7 @@ public:
         double stdSum = 0.0;
         for (int i = 1; i < PROCESSORS; i++)
         {
-            stdSum+ = pow(load[i]-_avg, 2.0);
+            stdSum += pow(load[i]-_avg, 2.0);
         }
         stdDeviation = pow((stdSum/(1.0*PROCESSORS)), 0.5);
         return stdDeviation;
