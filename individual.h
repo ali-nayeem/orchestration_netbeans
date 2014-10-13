@@ -69,10 +69,10 @@ public:
   
     double findMinMax()
     {
-        double max, min;
+        double max, min, sum = 0;
         max = min = load[0];
         maxPointer = minPointer = 0;
-        for (int i = 1; i < PROCESSORS; i++)
+        for (int i = 1; i < PROCESSORS; i++) //we also calculate avg here
         {
             if (load[i] > max)
             {
@@ -87,8 +87,11 @@ public:
                     minPointer = i;
                 }
             }
-
+            
+            sum = sum + load[i];
         }
+        avg = sum/(1.0*PROCESSORS);
+        stdDev = standardDeviation(avg);
         return max;
     }
 
@@ -102,27 +105,24 @@ public:
         return maxPointer;
     }
     
-    double findAverage()
+    double averageLoad()
     {
-        double sum = 0.0;
-        for (int i = 1; i < PROCESSORS; i++)
-        {
-            sum+ = load[i];
-        }
-        
-        return sum/(1.0*PROCESSORS);
+        return avg;
     }
-    double standardDeviation()
+    double stdDevLoad()
     {
-        double average = findAverage();
-        double std_deviation = 0.0;
-        double std_sum = 0.0;
+        return stdDev;
+    }
+    double standardDeviation(double _avg)
+    {
+        double stdDeviation = 0.0;
+        double stdSum = 0.0;
         for (int i = 1; i < PROCESSORS; i++)
         {
-            std_sum+ = pow(load[i]-average, 2.0);
+            stdSum+ = pow(load[i]-_avg, 2.0);
         }
-        std_deviation = pow((std_sum/(1.0*PROCESSORS)), 0.5);
-        return std_deviation;
+        stdDeviation = pow((stdSum/(1.0*PROCESSORS)), 0.5);
+        return stdDeviation;
     }
     
     unsigned assignActor(unsigned _actor, unsigned _newProcessor)
