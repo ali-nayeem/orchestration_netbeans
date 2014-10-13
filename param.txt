@@ -1,4 +1,4 @@
-pSwap 0.4
-pMut 0.1
+pSwap 0.0213
+pMut 0.0026666666666667
 rExploit 0.6
 maxGen 300
