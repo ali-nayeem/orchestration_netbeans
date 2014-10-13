@@ -32,7 +32,7 @@ void readParam()
     while (!fin.eof())
     {
         fin >> name >> value;
-        cout << name << ":" << value << ",";
+        //cout << name << ":" << value << ",";
         param[name] = value;
         cout << name << "=" << param[name] << endl;
     }
@@ -48,7 +48,7 @@ void readIO()
     while (!fin.eof())
     {
         fin >> name >> value;
-        cout << name << ":" << value << ",";
+        //cout << name << ":" << value << ",";
         io[name] = value;
         cout << name << "=" << io[name] << endl;
     }
@@ -127,18 +127,18 @@ void readData()
     }
 
     //test
-    print2dArray(COST_ADJ_MAT, ACTORS);
-    for (int i = 0; i < ACTORS; i++)
-    {
-        cout << i << "(" << EXECUTION_TIME[i] << ")" << ":";
-        for (int j = 0; j < COST_ADJ_LIST[i].size(); j++)
-        {
-            cout << COST_ADJ_LIST[i][j] << "(" << COST_ADJ_MAT[i][COST_ADJ_LIST[i][j]] << ")" << "-";
-        }
-        cout << endl;
-    }
-    //test
-    printAdjInfo();
+   // print2dArray(COST_ADJ_MAT, ACTORS);
+//    for (int i = 0; i < ACTORS; i++)
+//    {
+//        cout << i << "(" << EXECUTION_TIME[i] << ")" << ":";
+//        for (int j = 0; j < COST_ADJ_LIST[i].size(); j++)
+//        {
+//            cout << COST_ADJ_LIST[i][j] << "(" << COST_ADJ_MAT[i][COST_ADJ_LIST[i][j]] << ")" << "-";
+//        }
+//        cout << endl;
+//    }
+    
+    //printAdjInfo();
     fin.close();
 }
 
