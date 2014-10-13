@@ -1,2 +1,2 @@
-input small_graph.txt
+input inputga.dat
 map mapping.csv
