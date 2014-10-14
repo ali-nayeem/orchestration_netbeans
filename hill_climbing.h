@@ -41,7 +41,8 @@ public:
     {
         int gen = 0;
         EOT R;
-        ofstream stat( io["stat"].c_str() );
+        ofstream stat(io["stat"].c_str());
+        eoTimeCounter elapsedTime;
         do
         {
             gen++;
@@ -52,18 +53,22 @@ public:
             if (R > S)
             {
                 S = R;
-                cout << "Fitness updated at gen: " << gen << ". New Fitness,avg,stdDev: " << S.fitness()<<","<<S.avgLoad()<<","<<S.stdDevLoad() << endl;
+                cout << "Fitness updated at gen: " << gen << ". New Fitness,avg,stdDev: " << S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << endl;
 
             }
-            stat << S.fitness()<<","<<S.avgLoad()<<","<<S.stdDevLoad() << endl;
+            stat << S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() <<"," << SERIAL_LOAD/S.fitness()  <<endl;
+            elapsedTime();
+            int sec = elapsedTime.value() ;
         }
-        while (gen != maxGen);
+        while ( elapsedTime.value() < param["maxTime"] );
         stat.close();
+        cout <<endl<< "Total Time:" << elapsedTime.value() << endl;
+
     }
 
 private:
 
-/// eoInvalidateMonOp invalidates the embedded operator
+    /// eoInvalidateMonOp invalidates the embedded operator
     eoInvalidateMonOp<EOT> tweak;
     // eoInvalidateQuadOp invalidates the embedded operator
     eoEvalFunc<EOT>& eval;

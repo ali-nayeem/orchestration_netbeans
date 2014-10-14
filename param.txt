@@ -3,3 +3,4 @@ pMut 0.007
 rExploit 0.7
 exploreThreshold 0.1
 maxGen 20000
+maxTime 20

@@ -48,7 +48,7 @@ void main_function(int argc, char **argv)
     tweak.add(explore, 1 - param["rExploit"], true);
     
     HybridTweak<Indi> hybridTweak(exploit,explore);
-
+    
     //THE ALGORITHM
     HillClimbing<Indi> hc(tweak, eval, param["maxGen"]);
     cout << "Initial" << endl << initialSolution << endl;
