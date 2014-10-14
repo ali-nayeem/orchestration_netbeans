@@ -216,26 +216,7 @@ public:
     {
         // First write the fitness
         // EO<FitT>::printOn(_os);
-        for (int j = 0; j < ACTORS; j++)
-        {
-            cout << j << "|";
-        }
-        cout << endl << "-----------------------------------------" << endl;
-        for (int i = 0; i < PROCESSORS; i++)
-        {
-
-            for (int j = 0; j < ACTORS; j++)
-            {
-                cout << processor2actor[i][j] << "|";
-            }
-            cout << " : " << load[i] << endl;
-        }
-        cout << "-----------------------------------------" << endl;
-        for (int i = 0; i < ACTORS; i++)
-        {
-            cout << actor2processor[i] << "|";
-        }
-        cout << endl;
+       
         // START Code of default output
 
         /** HINTS
@@ -261,6 +242,29 @@ public:
          */
 
         // END   Code of input
+    }
+    void print()
+    {
+         for (int j = 0; j < ACTORS; j++)
+        {
+            cout << j << "|";
+        }
+        cout << endl << "-----------------------------------------" << endl;
+        for (int i = 0; i < PROCESSORS; i++)
+        {
+
+            for (int j = 0; j < ACTORS; j++)
+            {
+                cout << processor2actor[i][j] << "|";
+            }
+            cout << " : " << load[i] << endl;
+        }
+        cout << "-----------------------------------------" << endl;
+        for (int i = 0; i < ACTORS; i++)
+        {
+            cout << actor2processor[i] << "|";
+        }
+        cout << endl;
     }
 
     // accessing and setting values

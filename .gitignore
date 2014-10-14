@@ -1,0 +1,8 @@
+build
+dist
+nbproject
+.dep.inc
+main.exe
+main.o
+~*
+

@@ -14,9 +14,25 @@
 
 using namespace std;
 
+struct ActorLoad
+{
+
+    ActorLoad(unsigned _actor, double _load) : actor(_actor), load(_load)
+    {
+    }
+
+    unsigned actor;
+    double load;
+};
+vector <ActorLoad> actorLoadList;
+
+bool comparator(ActorLoad i, ActorLoad j)
+{
+    return (i.load > j.load);
+}
 vector <unsigned> *COST_ADJ_LIST;
 double ** COST_ADJ_MAT;
-double * EXECUTION_TIME;
+double * EXECUTION_TIME, SERIAL_LOAD = 0.0, *ACTOR_LOAD;
 unsigned ACTORS, EDGES, PROCESSORS, *ACTOR_LIST;
 
 map<string, float> param; //list of parameters
@@ -80,9 +96,10 @@ template <class X> void printVec(vector<X> &v)
     }
     cout << endl;
 }
+
 void printAdjInfo()
 {
-     for (int i = 0; i < ACTORS; i++)
+    for (int i = 0; i < ACTORS; i++)
     {
         cout << i << "(" << EXECUTION_TIME[i] << ")" << ":";
         for (int j = 0; j < COST_ADJ_LIST[i].size(); j++)
@@ -92,6 +109,7 @@ void printAdjInfo()
         cout << endl;
     }
 }
+
 void readData()
 {
     ifstream fin(io["input"].c_str());
@@ -103,6 +121,7 @@ void readData()
     COST_ADJ_LIST = new vector<unsigned>[ACTORS];
     COST_ADJ_MAT = new double* [ACTORS];
     EXECUTION_TIME = new double[ACTORS];
+    ACTOR_LOAD = new double[ACTORS];
     ACTOR_LIST = new unsigned[ACTORS];
     for (unsigned i = 0; i < ACTORS; i++)
     {
@@ -110,6 +129,7 @@ void readData()
         COST_ADJ_MAT[i] = new double[ACTORS];
         fin >> EXECUTION_TIME[i];
         cout << EXECUTION_TIME[i] << endl;
+        SERIAL_LOAD += EXECUTION_TIME[i];
     }
     for (int i = 0; i < ACTORS; i++)
     {
@@ -127,17 +147,26 @@ void readData()
     }
 
     //test
-   // print2dArray(COST_ADJ_MAT, ACTORS);
-//    for (int i = 0; i < ACTORS; i++)
-//    {
-//        cout << i << "(" << EXECUTION_TIME[i] << ")" << ":";
-//        for (int j = 0; j < COST_ADJ_LIST[i].size(); j++)
-//        {
-//            cout << COST_ADJ_LIST[i][j] << "(" << COST_ADJ_MAT[i][COST_ADJ_LIST[i][j]] << ")" << "-";
-//        }
-//        cout << endl;
-//    }
-    
+    // print2dArray(COST_ADJ_MAT, ACTORS);
+    for (int i = 0; i < ACTORS; i++)
+    {
+        //cout << i << "(" << EXECUTION_TIME[i] << ")" << ":";
+        ACTOR_LOAD[i] = EXECUTION_TIME[i];
+        for (int j = 0; j < COST_ADJ_LIST[i].size(); j++)
+        {
+            // cout << COST_ADJ_LIST[i][j] << "(" << COST_ADJ_MAT[i][COST_ADJ_LIST[i][j]] << ")" << "-";
+            ACTOR_LOAD[i] += COST_ADJ_MAT[i][COST_ADJ_LIST[i][j]];
+        }
+        actorLoadList.push_back(ActorLoad(i, ACTOR_LOAD[i]));
+        //test
+       // cout << ACTOR_LOAD[i] << "-";
+    }
+    sort(actorLoadList.begin(), actorLoadList.end(), comparator);
+    for (int i = 0; i < ACTORS; i++)
+    {
+        cout<<actorLoadList[i].actor<<"="<<actorLoadList[i].load<<"-";
+    }
+
     //printAdjInfo();
     fin.close();
 }

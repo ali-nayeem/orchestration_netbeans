@@ -37,22 +37,26 @@ void main_function(int argc, char **argv)
     MappingEvalFunc<Indi> eval;
 
     //initial solution
-    Indi inialSolution;
-    fairRandom(inialSolution);
-    eval(inialSolution);
+    Indi initialSolution;
+    fairRandom(initialSolution);
+    eval(initialSolution);
 
     //tweaks
     UniformMonCrossOver<Indi> exploit;
     Mutation<Indi> explore;
     eoPropCombinedMonOp<Indi> tweak(exploit, param["rExploit"]);
     tweak.add(explore, 1 - param["rExploit"], true);
+    
+    HybridTweak<Indi> hybridTweak(exploit,explore);
 
     //THE ALGORITHM
     HillClimbing<Indi> hc(tweak, eval, param["maxGen"]);
-    cout << "Initial" << endl << inialSolution << endl;
-    hc(inialSolution);
-    cout << "Final" << endl << inialSolution << endl;
-   // eval(inialSolution);
+    cout << "Initial" << endl << initialSolution << endl;
+    hc(initialSolution);
+    cout << "Final" << endl << initialSolution << endl;
+    double speedUp = SERIAL_LOAD/initialSolution.fitness();
+    cout<<"Serial load "<<SERIAL_LOAD<<endl;;
+    cout << "speedup "<< speedUp;
    // cout << "Final" << endl << inialSolution << endl;
 
 }

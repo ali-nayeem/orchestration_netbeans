@@ -41,6 +41,7 @@ public:
     {
         int gen = 0;
         EOT R;
+        ofstream stat( io["stat"].c_str() );
         do
         {
             gen++;
@@ -54,9 +55,10 @@ public:
                 cout << "Fitness updated at gen: " << gen << ". New Fitness,avg,stdDev: " << S.fitness()<<","<<S.avgLoad()<<","<<S.stdDevLoad() << endl;
 
             }
-
+            stat << S.fitness()<<","<<S.avgLoad()<<","<<S.stdDevLoad() << endl;
         }
         while (gen != maxGen);
+        stat.close();
     }
 
 private:
