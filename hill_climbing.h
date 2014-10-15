@@ -56,28 +56,82 @@ public:
                 cout << "Fitness updated at gen: " << gen << ". New Fitness,avg,stdDev: " << S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << endl;
 
             }
-            stat << S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() <<"," << SERIAL_LOAD/S.fitness()  <<endl;
+            stat << S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << SERIAL_LOAD / S.fitness() << endl;
             elapsedTime();
-            int sec = elapsedTime.value() ;
         }
-        while ( elapsedTime.value() < param["maxTime"] );
+        while (elapsedTime.value() < param["maxTime"]);
         stat.close();
-        cout <<endl<< "Total Time:" << elapsedTime.value() << endl;
+        cout << endl << "Total Time:" << elapsedTime.value() << endl;
 
     }
 
 private:
-
     /// eoInvalidateMonOp invalidates the embedded operator
     eoInvalidateMonOp<EOT> tweak;
     // eoInvalidateQuadOp invalidates the embedded operator
     eoEvalFunc<EOT>& eval;
     int maxGen;
-public:
-    EOT best;
 
 };
 
+template <class EOT>
+class SteepestAscent
+{
+public:
+
+    // added this second ctor as I didn't like the ordering of the parameters
+    // in the one above. Any objection :-) MS
+
+    SteepestAscent(eoMonOp<EOT>& _tweak, eoEvalFunc<EOT>& _eval) : tweak(_tweak), eval(_eval)
+    {
+    }
+
+    void operator()(EOT & S)
+    {
+        int gen = 0;
+        EOT R;
+        EOT W;
+        ofstream stat(io["stat"].c_str());
+        eoTimeCounter elapsedTime;
+        do
+        {
+            gen++;
+
+            R = S;
+            tweak(R);
+            eval(R);
+            for (int i = 1; i < param["nTweaks"]; i++)
+            {
+                W = S;
+                tweak(W);
+                eval(W);
+                if (W > R)
+                {
+                    R = W;
+                }
+            }
+            if (R > S)
+            {
+                S = R;
+                cout << "Fitness updated at gen: " << gen << ". New Fitness,avg,stdDev: " << S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << endl;
+
+            }
+            stat << S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << SERIAL_LOAD / S.fitness() << endl;
+            elapsedTime();
+        }
+        while (elapsedTime.value() < param["maxTime"]);
+        stat.close();
+        cout << endl << "Total Time:" << elapsedTime.value() << endl;
+
+    }
+
+private:
+    /// eoInvalidateMonOp invalidates the embedded operator
+    eoInvalidateMonOp<EOT> tweak;
+    // eoInvalidateQuadOp invalidates the embedded operator
+    eoEvalFunc<EOT>& eval;
+
+};
 
 #endif	/* HILL_CLIMBING_H */
 

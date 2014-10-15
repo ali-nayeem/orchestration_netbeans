@@ -4,3 +4,4 @@ rExploit 0.7
 exploreThreshold 0.1
 maxGen 20000
 maxTime 20
+nTweaks 20
