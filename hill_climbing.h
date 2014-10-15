@@ -133,5 +133,63 @@ private:
 
 };
 
+template<class EOT>
+class SteepestAscentWithReplacement
+{
+public:
+
+    SteepestAscentWithReplacement(eoMonOp<EOT>& _tweak, eoEvalFunc<EOT>& _eval) : tweak(_tweak), eval(_eval)
+    {
+    }
+
+    void operator()(EOT & S)
+    {
+        int gen = 0;
+        EOT R;
+        EOT W;
+        EOT Best;
+        Best = S;
+        ofstream stat(io["stat"].c_str());
+        eoTimeCounter elapsedTime;
+        do
+        {
+            gen++;
+
+            R = S;
+            tweak(R);
+            eval(R);
+            for (int i = 1; i < param["nTweaks"]; i++)
+            {
+                W = S;
+                tweak(W);
+                eval(W);
+                if (W > R)
+                {
+                    R = W;
+                }
+            }
+            S = R;
+            if (S > Best)
+            {
+                Best = S;
+                cout << "Fitness updated at gen: " << gen << ". New Fitness, avg, stdDev: " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
+
+            }
+            stat << Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << SERIAL_LOAD / Best.fitness() << endl;
+            elapsedTime();
+        }
+        while (elapsedTime.value() < param["maxTime"]);
+        stat.close();
+        cout << endl << "Total Time:" << elapsedTime.value() << endl;
+    }
+
+private:
+    /// eoInvalidateMonOp invalidates the embedded operator
+    eoInvalidateMonOp<EOT> tweak;
+    // eoInvalidateQuadOp invalidates the embedded operator
+    eoEvalFunc<EOT>& eval;
+
+};
+
 #endif	/* HILL_CLIMBING_H */
 
