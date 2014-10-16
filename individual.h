@@ -38,7 +38,7 @@ public:
         isModified = vector<bool>(PROCESSORS, true);
         load = vector<double>(PROCESSORS, 0);
         invLoad = vector<double>(PROCESSORS, 0);
-        processor2actor = vector < vector<bool> > (PROCESSORS, vector<bool>(ACTORS, 0));
+        processor2actor = vector < vector<bool> > (PROCESSORS, vector<bool>(ACTORS, false));
         //        for(int i=0;i<PROCESSORS;i++)
         //        {
         //            printVec(processor2actor[i]);
@@ -216,9 +216,12 @@ public:
     {
         // First write the fitness
         // EO<FitT>::printOn(_os);
-       
-        // START Code of default output
 
+        // START Code of default output
+        for (int actor = 0; actor < ACTORS; actor++)
+        {
+            _os << actor2processor[actor] << " ";
+        }
         /** HINTS
          * in EO we systematically write the sizes of things before the things
          * so readFrom is easier to code (see below)
@@ -235,7 +238,12 @@ public:
         // of course you should read the fitness first!
         // EO<FitT>::readFrom(_is);
         // START Code of input
-
+        unsigned processor;
+        for (int actor = 0; actor < ACTORS; actor++)
+        {
+            _is >> processor;
+            assignActor(actor,processor);
+        }
         /** HINTS
          * remember the Mapping object will come from the default ctor
          * this is why having the sizes written out is useful
@@ -243,9 +251,10 @@ public:
 
         // END   Code of input
     }
+
     void print()
     {
-         for (int j = 0; j < ACTORS; j++)
+        for (int j = 0; j < ACTORS; j++)
         {
             cout << j << "|";
         }

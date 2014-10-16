@@ -128,7 +128,7 @@ void readData()
         ACTOR_LIST[i] = i;
         COST_ADJ_MAT[i] = new double[ACTORS];
         fin >> EXECUTION_TIME[i];
-        cout << EXECUTION_TIME[i] << endl;
+        //cout << EXECUTION_TIME[i] << endl;
         SERIAL_LOAD += EXECUTION_TIME[i];
     }
     for (int i = 0; i < ACTORS; i++)
@@ -162,10 +162,10 @@ void readData()
        // cout << ACTOR_LOAD[i] << "-";
     }
     sort(actorLoadList.begin(), actorLoadList.end(), comparator);
-    for (int i = 0; i < ACTORS; i++)
-    {
-        cout<<actorLoadList[i].actor<<"="<<actorLoadList[i].load<<"-";
-    }
+//    for (int i = 0; i < ACTORS; i++)
+//    {
+//        cout<<actorLoadList[i].actor<<"="<<actorLoadList[i].load<<"-";
+//    }
 
     //printAdjInfo();
     fin.close();

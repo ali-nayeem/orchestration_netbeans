@@ -1,3 +1,5 @@
-input inputga.dat
+input data/TDE-inputga.dat
 map mapping.csv
 stat stat.csv
+indi indi.txt
+indiLoad indiLoad.txt
