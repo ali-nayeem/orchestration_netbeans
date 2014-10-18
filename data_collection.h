@@ -10,6 +10,7 @@
 
 #include <climits>
 #include <list>
+#define E 2.7183
 
 
 using namespace std;

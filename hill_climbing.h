@@ -191,5 +191,64 @@ private:
 
 };
 
+template <class EOT>
+class SimulatedAnnealing
+{
+public:
+
+    // added this second ctor as I didn't like the ordering of the parameters
+    // in the one above. Any objection :-) MS
+
+    SimulatedAnnealing(eoMonOp<EOT>& _tweak, eoEvalFunc<EOT>& _eval) : tweak(_tweak), eval(_eval)
+    {
+    }
+
+    void operator()(EOT & S)
+    {
+        int gen = 0;
+        double t = param["maxTime"], pChoose;
+        EOT R;
+        EOT Best = S;
+        ofstream stat(io["stat"].c_str());
+        eoTimeCounter elapsedTime;
+        do
+        {
+            gen++;
+
+            R = S;
+            tweak(R);
+            eval(R);
+
+            pChoose = pow(E, (R.fitness() - S.fitness()) / t);
+
+            if (R > S || rng.uniform() < pChoose)
+            {
+                S = R;
+            }
+
+            elapsedTime();
+            t = t - elapsedTime.value();
+
+            if (S > Best)
+            {
+                Best = S;
+                cout << "Fitness updated at gen: " << gen << ". New Fitness, avg, stdDev: " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
+            }
+            stat << Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << SERIAL_LOAD / Best.fitness() << endl;
+        }
+        while (elapsedTime.value() < param["maxTime"]);
+        stat.close();
+        cout << endl << "Total Time:" << elapsedTime.value() << endl;
+
+    }
+
+private:
+    /// eoInvalidateMonOp invalidates the embedded operator
+    eoInvalidateMonOp<EOT> tweak;
+    // eoInvalidateQuadOp invalidates the embedded operator
+    eoEvalFunc<EOT>& eval;
+
+};
+
 #endif	/* HILL_CLIMBING_H */
 

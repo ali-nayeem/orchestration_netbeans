@@ -42,7 +42,7 @@ void main_function(int argc, char **argv)
 
     //initial solution
     Indi initialSolution;
-    fullyRandom(initialSolution);
+    fairRandom(initialSolution);
      //indiLoad >> initialSolution ;
     eval(initialSolution);
 
@@ -57,6 +57,7 @@ void main_function(int argc, char **argv)
     HillClimbing<Indi> hc(tweak, eval, param["maxGen"]);
     //SteepestAscent<Indi> sa(tweak,eval);
     //SteepestAscentWithReplacement<Indi> sar(tweak,eval);
+    //SimulatedAnnealing<Indi> simAnn(tweak,eval);
 
     //initial print
     cout << "Initial Solution:" << endl;
@@ -69,7 +70,7 @@ void main_function(int argc, char **argv)
     cout << "Final" << endl << initialSolution << endl;
     double speedUp = SERIAL_LOAD / initialSolution.fitness();
     cout << "Serial load " << SERIAL_LOAD << endl;
-    cout << "speedup " << speedUp;
+    cout << "speedup " << speedUp << endl;
     //cout << "Final Solution:" << endl ;
     //initialSolution.print();
     //indiSave << initialSolution;

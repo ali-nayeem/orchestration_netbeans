@@ -1,7 +1,7 @@
-pSwap 0.30
-pMut 0.05
+pSwap 0.04
+pMut 0.008
 rExploit 0.7
 exploreThreshold 0.1
 maxGen 20000
-maxTime 20
+maxTime 40
 nTweaks 10
