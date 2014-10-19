@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   hill_climbing.h
  * Author: MAN
  *
@@ -206,11 +206,12 @@ public:
     void operator()(EOT & S)
     {
         int gen = 0;
-        double t = param["maxTime"], pChoose;
+        double totalTime = param["maxTime"], pChoose, exp;
         EOT R;
         EOT Best = S;
         ofstream stat(io["stat"].c_str());
         eoTimeCounter elapsedTime;
+        double & passedTime = elapsedTime.value();
         do
         {
             gen++;
@@ -219,15 +220,15 @@ public:
             tweak(R);
             eval(R);
 
-            pChoose = pow(E, (R.fitness() - S.fitness()) / t);
+            exp = (S.fitness() - R.fitness()) / (totalTime - passedTime);
+            pChoose = pow(E, exp);
 
             if (R > S || rng.uniform() < pChoose)
             {
                 S = R;
             }
 
-            elapsedTime();
-            t = t - elapsedTime.value();
+            //cout << pChoose << endl;
 
             if (S > Best)
             {
@@ -235,10 +236,12 @@ public:
                 cout << "Fitness updated at gen: " << gen << ". New Fitness, avg, stdDev: " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
             }
             stat << Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << SERIAL_LOAD / Best.fitness() << endl;
+            
+            elapsedTime();
         }
-        while (elapsedTime.value() < param["maxTime"]);
+        while (passedTime < totalTime);
         stat.close();
-        cout << endl << "Total Time:" << elapsedTime.value() << endl;
+        cout << endl << "Total Time:" << passedTime << endl;
 
     }
 

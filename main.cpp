@@ -20,6 +20,8 @@ using namespace std;
 #include "fitness_evaluation.h"
 #include "tweak.h"
 #include "hill_climbing.h"
+#include "quad_crossover.h"
+#include "genetic_algorithm.h"
 
 typedef eoMinimizingFitness MyFitT;
 typedef Mapping<MyFitT> Indi;
@@ -29,9 +31,7 @@ typedef Mapping<MyFitT> Indi;
  */
 void main_function(int argc, char **argv)
 {
-    param["seed"] = 1413089664;     //1413089664 or time(0)
-    cout << "seed=" << (uint32_t) param["seed"] << endl;
-    rng.reseed((uint32_t)param["seed"]);
+    
 
     //individual file read/write
     //ofstream indiSave(io["indi"].c_str());
@@ -43,7 +43,7 @@ void main_function(int argc, char **argv)
     //initial solution
     Indi initialSolution;
     fairRandom(initialSolution);
-     //indiLoad >> initialSolution ;
+    //indiLoad >> initialSolution ;
     eval(initialSolution);
 
     //tweaks
@@ -77,10 +77,74 @@ void main_function(int argc, char **argv)
 
 }
 
+void ga_run()
+{
+    //fitness evaluators
+    MappingEvalFunc<Indi> eval;
+
+    //population
+    eoPop<Indi> pop;
+    
+    //selection
+    eoDetTournamentSelect<Indi> selectOne(param["tFit"]);
+    double perc = (param["popSize"] - param["elite"]) / param["popSize"]; 
+    eoSelectPerc<Indi> select(selectOne, perc);
+    
+    //crossover
+    MappingQuadCrossover<Indi> xover;
+    
+    //mutations
+    UniformMonCrossOver<Indi> exploit;
+    Mutation<Indi> explore;
+    eoPropCombinedMonOp<Indi> tweak(exploit, param["rExploit"]);
+    tweak.add(explore, 1 - param["rExploit"], true);
+    
+    eoTimeContinue<Indi> continuator((time_t)param["maxTime"]);
+    //CHECKPOINT
+    eoCheckPoint<Indi> checkpoint(continuator);
+    // Create a counter parameter
+    eoValueParam<unsigned> generationCounter(0, "Generation");
+    // Create an incrementor (sub-class of eoUpdater). Note that the
+    // parameter's value is passed by reference,
+    // so every time the incrementer is updated (every generation),
+    // the data in generationCounter will change.
+    eoIncrementor<unsigned> increment(generationCounter.value());
+    // Add it to the checkpoint,
+    // so the counter is updated (here, incremented) every generation
+    checkpoint.add(increment);
+    // now some statistics on the population:
+    // Best fitness in population
+    eoBestFitnessStat<Indi> bestStat;
+    // Second moment stats: average and stdev
+    eoSecondMomentStats<Indi> SecondStat;
+    // Add them to the checkpoint to get them called at the appropriate time
+    checkpoint.add(bestStat);
+    checkpoint.add(SecondStat);
+    // The Stdout monitor will print parameters to the screen ...
+    eoStdoutMonitor monitor(false);
+    // when called by the checkpoint (i.e. at every generation)
+    checkpoint.add(monitor);
+    // the monitor will output a series of parameters: add them
+    monitor.add(generationCounter);
+    monitor.add(bestStat);
+    monitor.add(SecondStat);
+    
+    //THE ALGORITHM
+    ourGA <Indi> ga(select, xover, tweak,eval, checkpoint);
+    //Bismillah
+    ga(pop);
+    
+    cout<<pop.best_element().fitness()<<endl<<pop.worse_element().fitness()<<endl;
+
+    
+}
+
 int main(int argc, char** argv)
 {
     gatherAllInfo();
-
+    param["seed"] = 1413089664; //1413089664 or time(0)
+    cout << "seed=" << (uint32_t) param["seed"] << endl;
+    rng.reseed((uint32_t) param["seed"]);
     ////       int myints[] = {16, 2, 50, 29,0};
     ////       vector<int> v(myints, myints + sizeof (myints) / sizeof (int));
     ////       for(int i =0 ; i<20 ;i++)
@@ -115,7 +179,8 @@ int main(int argc, char** argv)
     //    cout << endl << a << endl;
 
 
-    main_function(argc, argv);
+    //main_function(argc, argv);
+    ga_run();
     //printAdjInfo();
 
     return 0;

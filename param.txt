@@ -1,7 +1,11 @@
 pSwap 0.04
-pMut 0.008
-rExploit 0.7
+pMut 0.007
+pCross 0.003
+rExploit 0
 exploreThreshold 0.1
-maxGen 20000
-maxTime 40
+maxGen 200000
+maxTime 20
 nTweaks 10
+popSize 16
+elite   4
+tFit 4
