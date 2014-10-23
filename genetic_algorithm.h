@@ -43,25 +43,26 @@ public:
 
     void operator()(eoPop<EOT>& P)
     {
+        ofstream stat(io["stat"].c_str());
         eoPop<EOT> Q;
         EOT Best;
-        int gen = 0;
+        int genCount = 0;
         //initialization
         for (int i = 0; i < param["popSize"]; i++)
         {
             EOT initial;
-            fairRandom(initial);
+            fullyRandom(initial);
             P.push_back(initial);
         }
         apply<EOT > (eval, P);
         Best = P[0];
         do
         {
-            gen++;
-            //fitness evaluation
+            //update Best
             if (P.best_element() > Best)
             {
                 Best = P.best_element();
+                stat << genCount << "," << Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << SERIAL_LOAD / Best.fitness() << endl;
             }
             //selection
             select(P, Q); //select parents from P and put in Q
@@ -90,11 +91,14 @@ public:
                     Q[2 * i + 1].invalidate();
                 }
             }
+            //P <- Q
             P.swap(Q);
+            //fitness evaluation
             apply<EOT > (eval, P);
-
+            genCount++;
         }
         while (cont(P));
+        stat.close();
         //return Best;
     }
 

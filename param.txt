@@ -4,7 +4,7 @@ pCross 0.003
 rExploit 0
 exploreThreshold 0.1
 maxGen 200000
-maxTime 20
+maxTime 2000
 nTweaks 10
 popSize 16
 elite   4

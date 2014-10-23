@@ -94,10 +94,10 @@ void ga_run()
     MappingQuadCrossover<Indi> xover;
     
     //mutations
-    UniformMonCrossOver<Indi> exploit;
+    //UniformMonCrossOver<Indi> exploit;
     Mutation<Indi> explore;
-    eoPropCombinedMonOp<Indi> tweak(exploit, param["rExploit"]);
-    tweak.add(explore, 1 - param["rExploit"], true);
+    //eoPropCombinedMonOp<Indi> tweak(exploit, param["rExploit"]);
+    //tweak.add(explore, 1 - param["rExploit"], true);
     
     eoTimeContinue<Indi> continuator((time_t)param["maxTime"]);
     //CHECKPOINT
@@ -130,11 +130,11 @@ void ga_run()
     monitor.add(SecondStat);
     
     //THE ALGORITHM
-    ourGA <Indi> ga(select, xover, tweak,eval, checkpoint);
+    ourGA <Indi> ga(select, xover, explore,eval, checkpoint);
     //Bismillah
     ga(pop);
     
-    cout<<pop.best_element().fitness()<<endl<<pop.worse_element().fitness()<<endl;
+    //cout<<pop.best_element().fitness()<<endl<<pop.worse_element().fitness()<<endl;
 
     
 }
@@ -145,6 +145,7 @@ int main(int argc, char** argv)
     param["seed"] = 1413089664; //1413089664 or time(0)
     cout << "seed=" << (uint32_t) param["seed"] << endl;
     rng.reseed((uint32_t) param["seed"]);
+    ga_run();
     ////       int myints[] = {16, 2, 50, 29,0};
     ////       vector<int> v(myints, myints + sizeof (myints) / sizeof (int));
     ////       for(int i =0 ; i<20 ;i++)
@@ -180,7 +181,7 @@ int main(int argc, char** argv)
 
 
     //main_function(argc, argv);
-    ga_run();
+    
     //printAdjInfo();
 
     return 0;
