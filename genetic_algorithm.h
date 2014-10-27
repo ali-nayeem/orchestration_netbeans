@@ -111,7 +111,7 @@ private:
     eoInvalidateQuadOp<EOT> cross;
     eoSelectPerc<EOT> select;
     eoEvalFunc<EOT>& eval;
-    void (*initializer)(EOT);
+    void (*initializer)(EOT &);
 
 public:
     EOT best;
