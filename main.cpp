@@ -130,7 +130,7 @@ void ga_run()
     monitor.add(SecondStat);
     
     //THE ALGORITHM
-    ourGA <Indi> ga(select, xover, explore,eval, checkpoint);
+    ourGA <Indi> ga(select, xover, explore,eval, checkpoint,fullyRandom);
     //Bismillah
     ga(pop);
     
