@@ -20,29 +20,13 @@ public:
     {
     }
 
-    //    HillClimbing(
-    //           eoSelectPerc<EOT>& _select,
-    //           eoQuadOp<EOT>& _cross,
-    //           eoMonOp<EOT>& _mutate,
-    //           eoEvalFunc<EOT>& _eval,
-    //           eoContinue<EOT>& _cont,
-    //           unsigned _elite)
-    //    : cont(_cont),
-    //    tweak(_mutate),
-    //    cross(_cross),
-    //    select(_select),
-    //    elite(_elite),
-    //    eval(_eval)
-    //    {
-    //        //best = NULL;
-    //    }
-
     void operator()(EOT & S)
     {
         int gen = 0;
         EOT R;
         ofstream stat(io["stat"].c_str());
         eoTimeCounter elapsedTime;
+        double & passedTime = elapsedTime.value();
         do
         {
             gen++;
@@ -50,18 +34,19 @@ public:
             R = S;
             tweak(R);
             eval(R);
+            //update time
+            elapsedTime();
             if (R > S)
             {
                 S = R;
-                cout << "Fitness updated at gen: " << gen << ". New Fitness,avg,stdDev: " << S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << endl;
+                cout << "Fitness updated at gen: " << gen << " sec:" << passedTime <<" . New Fitness,avg,stdDev: " << S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << endl;
+                stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
 
             }
-            stat << S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << SERIAL_LOAD / S.fitness() << endl;
-            elapsedTime();
         }
-        while (elapsedTime.value() < param["maxTime"]);
+        while (passedTime < param["maxTime"]);
         stat.close();
-        cout << endl << "Total Time:" << elapsedTime.value() << endl;
+        cout << endl << "Total Time:" << passedTime << endl;
 
     }
 
@@ -236,7 +221,7 @@ public:
                 cout << "Fitness updated at gen: " << gen << ". New Fitness, avg, stdDev: " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
             }
             stat << Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << SERIAL_LOAD / Best.fitness() << endl;
-            
+
             elapsedTime();
         }
         while (passedTime < totalTime);

@@ -31,12 +31,14 @@ public:
           eoQuadOp<EOT>& _cross,
           eoMonOp<EOT>& _mutate,
           eoEvalFunc<EOT>& _eval,
-          eoContinue<EOT>& _cont)
+          eoContinue<EOT>& _cont,
+          void (*_initializer)(EOT &) )
     : cont(_cont),
     mutate(_mutate),
     cross(_cross),
     select(_select),
-    eval(_eval)
+    eval(_eval),
+    initializer(_initializer)
     {
         //best = NULL;
     }
@@ -51,7 +53,7 @@ public:
         for (int i = 0; i < param["popSize"]; i++)
         {
             EOT initial;
-            fullyRandom(initial);
+            initializer(initial);
             P.push_back(initial);
         }
         apply<EOT > (eval, P);

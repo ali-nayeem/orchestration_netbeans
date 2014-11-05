@@ -35,7 +35,7 @@ void main_function(int argc, char **argv)
 
     //individual file read/write
     //ofstream indiSave(io["indi"].c_str());
-    ifstream indiLoad(io["indiLoad"].c_str());
+    //ifstream indiLoad(io["indiLoad"].c_str());
 
     //fitness evaluators
     MappingEvalFunc<Indi> eval;
@@ -145,7 +145,8 @@ int main(int argc, char** argv)
     param["seed"] = 1413089664; //1413089664 or time(0)
     cout << "seed=" << (uint32_t) param["seed"] << endl;
     rng.reseed((uint32_t) param["seed"]);
-    ga_run();
+    //ga_run();
+    main_function(argc, argv);
     ////       int myints[] = {16, 2, 50, 29,0};
     ////       vector<int> v(myints, myints + sizeof (myints) / sizeof (int));
     ////       for(int i =0 ; i<20 ;i++)

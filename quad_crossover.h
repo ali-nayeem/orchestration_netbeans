@@ -54,12 +54,6 @@ public:
 
             }
         }
-        /** Requirement
-         * if (at least one genotype has been modified) // no way to distinguish
-         *     oneAtLeastIsModified = true;
-         * else
-         *     oneAtLeastIsModified = false;
-         */
         return modified;
         // END code for crossover of _genotype1 and _genotype2 objects
     }
