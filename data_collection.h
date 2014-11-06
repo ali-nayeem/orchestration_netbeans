@@ -56,6 +56,16 @@ void readParam()
     fin.close();
 
 }
+template <class  Type> void printParam(Type param,ostream & out)
+{
+    typename Type::iterator it;
+    out<<"Final parameters:";
+    for(it = param.begin(); it != param.end(); it++)
+    {
+        out<< (*it).first <<"="<< (*it).second <<",";
+    }
+    out<<endl;
+}
 
 void readIO()
 {
@@ -70,6 +80,11 @@ void readIO()
         cout << name << "=" << io[name] << endl;
     }
     fin.close();
+    string path = "data/"+io["input"]+"/";
+    io["path"] = path;
+    io["input"] = path + io["input"] + "-inputga.dat"; //data/DES/DES-inputga.dat
+    io["stat"] = path + io["stat"];
+    
 
 }
 
@@ -114,6 +129,11 @@ void printAdjInfo()
 void readData()
 {
     ifstream fin(io["input"].c_str());
+    if(fin.is_open() == false)
+    {
+        cout<<"Error opening data file"<<endl;
+        exit(0);
+    }
     unsigned u, v;
     double w;
     fin >> PROCESSORS;
@@ -172,11 +192,38 @@ void readData()
     fin.close();
 }
 
+void autoAdjustParam()
+{
+    if(param["processors"] != 0)
+    {
+        PROCESSORS = param["processors"];
+    }
+    if(param["pSwap"] == 0)
+    {
+        param["pSwap"] = 2.4 * PROCESSORS / ACTORS;
+    }
+    if(param["pMut"] == 0)
+    {
+        param["pMut"] = 3.0 / ACTORS;
+    }
+    if(param["seed"] == 0)
+    {
+        param["seed"] = time(0);
+    }
+    
+}
+
 void gatherAllInfo()
 {
     readParam();
     readIO();
     readData();
+    autoAdjustParam();
+    printParam(param,cout);
+    printParam(io,cout);
+    ofstream temp((io["path"]+"param.txt").c_str());
+    printParam(param,temp);
+    temp.close();
     //    floydWarshallWithPath();
     //    findDS();
 }

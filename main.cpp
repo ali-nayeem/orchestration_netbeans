@@ -60,8 +60,8 @@ void main_function(int argc, char **argv)
     //SimulatedAnnealing<Indi> simAnn(tweak,eval);
 
     //initial print
-    cout << "Initial Solution:" << endl;
-    initialSolution.print();
+    //cout << "Initial Solution:" << endl;
+    //initialSolution.print();
 
     //In the name of Allah
     hc(initialSolution);
@@ -142,8 +142,8 @@ void ga_run()
 int main(int argc, char** argv)
 {
     gatherAllInfo();
-    param["seed"] = 1413089664; //1413089664 or time(0)
-    cout << "seed=" << (uint32_t) param["seed"] << endl;
+    //param["seed"] = 1413089664; //1413089664 or time(0)
+    //cout << "seed=" << (uint32_t) param["seed"] << endl;
     rng.reseed((uint32_t) param["seed"]);
     //ga_run();
     main_function(argc, argv);

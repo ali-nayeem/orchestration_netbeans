@@ -27,6 +27,7 @@ public:
         ofstream stat(io["stat"].c_str());
         eoTimeCounter elapsedTime;
         double & passedTime = elapsedTime.value();
+        stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
         do
         {
             gen++;
@@ -39,7 +40,7 @@ public:
             if (R > S)
             {
                 S = R;
-                cout << "Fitness updated at gen: " << gen << " sec:" << passedTime <<" . New Fitness,avg,stdDev: " << S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << endl;
+                cout << "Fitness updated at gen: " << gen << " sec:" << passedTime <<" . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / S.fitness() << " , "<<S.fitness() << " , " << S.avgLoad() << " , " << S.stdDevLoad() << endl;
                 stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
 
             }

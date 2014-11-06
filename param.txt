@@ -1,11 +1,13 @@
-pSwap 0.05
-pMut 0.008
+#pSwap 0.05
+#pMut 0.008
 pCross 0.003
 rExploit 0.7
 exploreThreshold 0.1
 maxGen 200000
-maxTime 240
+maxTime 40
 nTweaks 10
 popSize 16
 elite   4
 tFit 4
+processors 8
+seed 1413089664
