@@ -35,6 +35,7 @@ vector <unsigned> *COST_ADJ_LIST;
 double ** COST_ADJ_MAT;
 double * EXECUTION_TIME, SERIAL_LOAD = 0.0, *ACTOR_LOAD;
 unsigned ACTORS, EDGES, PROCESSORS, *ACTOR_LIST;
+ofstream stat;
 
 map<string, float> param; //list of parameters
 map<string, string> io; //list of io filenames
@@ -83,9 +84,9 @@ void readIO()
     string path = "data/"+io["input"]+"/";
     io["path"] = path;
     io["input"] = path + io["input"] + "-inputga.dat"; //data/DES/DES-inputga.dat
-    io["stat"] = path + io["stat"];
+    string tweak = (param["rExploit"] == 0)? "normal":"hybrid";
+    io["stat"] = path + tweak + "-" + io["algo"] + "-" +io["stat"];
     
-
 }
 
 template <class X> void print2dArray(X ** array, unsigned dim, unsigned row = -1)
@@ -205,6 +206,10 @@ void autoAdjustParam()
     if(param["pMut"] == 0)
     {
         param["pMut"] = 3.0 / ACTORS;
+    }
+    if(param["pCross"] == 0)
+    {
+        param["pCross"] = param["pMut"];
     }
     if(param["seed"] == 0)
     {

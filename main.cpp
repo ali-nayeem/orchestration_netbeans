@@ -31,7 +31,7 @@ typedef Mapping<MyFitT> Indi;
  */
 void main_function(int argc, char **argv)
 {
-    
+
 
     //individual file read/write
     //ofstream indiSave(io["indi"].c_str());
@@ -84,22 +84,22 @@ void ga_run()
 
     //population
     eoPop<Indi> pop;
-    
+
     //selection
     eoDetTournamentSelect<Indi> selectOne(param["tFit"]);
-    double perc = (param["popSize"] - param["elite"]) / param["popSize"]; 
+    double perc = (param["popSize"] - param["elite"]) / param["popSize"];
     eoSelectPerc<Indi> select(selectOne, perc);
-    
+
     //crossover
     MappingQuadCrossover<Indi> xover;
-    
+
     //mutations
-    //UniformMonCrossOver<Indi> exploit;
+    UniformMonCrossOver<Indi> exploit;
     Mutation<Indi> explore;
-    //eoPropCombinedMonOp<Indi> tweak(exploit, param["rExploit"]);
-    //tweak.add(explore, 1 - param["rExploit"], true);
-    
-    eoTimeContinue<Indi> continuator((time_t)param["maxTime"]);
+    eoPropCombinedMonOp<Indi> tweak(exploit, param["rExploit"]);
+    tweak.add(explore, 1 - param["rExploit"], true);
+
+    eoTimeContinue<Indi> continuator((time_t) param["maxTime"]);
     //CHECKPOINT
     eoCheckPoint<Indi> checkpoint(continuator);
     // Create a counter parameter
@@ -128,15 +128,15 @@ void ga_run()
     monitor.add(generationCounter);
     monitor.add(bestStat);
     monitor.add(SecondStat);
-    
+
     //THE ALGORITHM
-    ourGA <Indi> ga(select, xover, explore,eval, checkpoint,fullyRandom);
+    ourGA <Indi> ga(select, xover, tweak, eval, checkpoint, fullyRandom);
     //Bismillah
     ga(pop);
-    
+
     //cout<<pop.best_element().fitness()<<endl<<pop.worse_element().fitness()<<endl;
 
-    
+
 }
 
 int main(int argc, char** argv)
@@ -145,8 +145,14 @@ int main(int argc, char** argv)
     //param["seed"] = 1413089664; //1413089664 or time(0)
     //cout << "seed=" << (uint32_t) param["seed"] << endl;
     rng.reseed((uint32_t) param["seed"]);
-    //ga_run();
-    main_function(argc, argv);
+    if (io["algo"].compare("pop") == 0)
+    {
+        ga_run();
+    }
+    else
+    {
+        main_function(argc, argv);
+    }
     ////       int myints[] = {16, 2, 50, 29,0};
     ////       vector<int> v(myints, myints + sizeof (myints) / sizeof (int));
     ////       for(int i =0 ; i<20 ;i++)
@@ -182,7 +188,7 @@ int main(int argc, char** argv)
 
 
     //main_function(argc, argv);
-    
+
     //printAdjInfo();
 
     return 0;

@@ -45,6 +45,7 @@ public:
         bool invalid = false;
         //unsigned maxProc = _genotype.rouletteWheelForMaxProcessor();
         unsigned maxProc = _genotype.maxProcessor();
+        //unsigned otherProc = _genotype.rouletteWheelForMaxProcessor(maxProc);
         unsigned otherProc = rng.random(PROCESSORS);
         while (maxProc == otherProc)
         {
