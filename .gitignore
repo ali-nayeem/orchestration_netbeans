@@ -4,5 +4,6 @@ nbproject
 .dep.inc
 *.exe
 *.[oa]
+*.csv
 ~*
 
