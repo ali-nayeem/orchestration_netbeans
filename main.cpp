@@ -94,10 +94,10 @@ void ga_run()
     MappingQuadCrossover<Indi> xover;
 
     //mutations
-    UniformMonCrossOver<Indi> exploit;
+    //UniformMonCrossOver<Indi> exploit;
     Mutation<Indi> explore;
-    eoPropCombinedMonOp<Indi> tweak(exploit, param["rExploit"]);
-    tweak.add(explore, 1 - param["rExploit"], true);
+    //eoPropCombinedMonOp<Indi> tweak(exploit, param["rExploit"]);
+    //tweak.add(explore, 1 - param["rExploit"], true);
 
     eoTimeContinue<Indi> continuator((time_t) param["maxTime"]);
     //CHECKPOINT
@@ -130,7 +130,7 @@ void ga_run()
     monitor.add(SecondStat);
 
     //THE ALGORITHM
-    ourGA <Indi> ga(select, xover, tweak, eval, checkpoint, fullyRandom);
+    ourGA <Indi> ga(select, xover, explore, eval, checkpoint, fairRandom);
     //Bismillah
     ga(pop);
 
