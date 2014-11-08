@@ -35,8 +35,10 @@ public:
             R = S;
             tweak(R);
             eval(R);
+            
             //update time
             elapsedTime();
+            
             if (R > S)
             {
                 S = R;

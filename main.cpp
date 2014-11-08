@@ -98,7 +98,9 @@ void ga_run()
     Mutation<Indi> explore;
     //eoPropCombinedMonOp<Indi> tweak(exploit, param["rExploit"]);
     //tweak.add(explore, 1 - param["rExploit"], true);
-
+    
+    
+    //termination
     eoTimeContinue<Indi> continuator((time_t) param["maxTime"]);
     //CHECKPOINT
     eoCheckPoint<Indi> checkpoint(continuator);

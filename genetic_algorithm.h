@@ -32,7 +32,7 @@ public:
           eoMonOp<EOT>& _mutate,
           eoEvalFunc<EOT>& _eval,
           eoContinue<EOT>& _cont,
-          void (*_initializer)(EOT &) )
+          void (*_initializer)(EOT &))
     : cont(_cont),
     mutate(_mutate),
     cross(_cross),
@@ -49,6 +49,8 @@ public:
         eoPop<EOT> Q;
         EOT Best;
         int genCount = 0;
+        eoTimeCounter elapsedTime;
+        double & passedTime = elapsedTime.value();
         //initialization
         for (int i = 0; i < param["popSize"]; i++)
         {
@@ -64,7 +66,8 @@ public:
             if (P.best_element() > Best)
             {
                 Best = P.best_element();
-                stat << genCount << "," << Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << SERIAL_LOAD / Best.fitness() << endl;
+                stat << passedTime << "," << SERIAL_LOAD / Best.fitness()  << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
+                cout << "Fitness updated at gen: " << genCount << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
             }
             //selection
             select(P, Q); //select parents from P and put in Q
@@ -98,9 +101,11 @@ public:
             //fitness evaluation
             apply<EOT > (eval, P);
             genCount++;
+            elapsedTime();
         }
-        while (cont(P));
+        while (passedTime < param["maxTime"]);
         stat.close();
+        cout<< "Final sec:" << passedTime <<" . Final speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
         //return Best;
     }
 
