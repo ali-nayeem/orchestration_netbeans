@@ -67,6 +67,16 @@ template <class  Type> void printParam(Type param,ostream & out)
     }
     out<<endl;
 }
+inline string stringify(double x)
+{
+  ostringstream o;
+  if (!(o << x))
+  {
+      cout<<"Problem in double to string conversion.";
+      exit(0);
+  }
+  return o.str();
+}
 
 void readIO()
 {
@@ -84,8 +94,9 @@ void readIO()
     string path = "data/"+io["input"]+"/";
     io["path"] = path;
     io["input"] = path + io["input"] + "-inputga.dat"; //data/DES/DES-inputga.dat
-    string tweak = (param["rExploit"] == 0)? "normal":"hybrid";
-    io["stat"] = path + tweak + "-" + io["algo"] + "-" +io["stat"];
+    string tweak = (param["rExploit"] == 0)? "normal_tweak":"hybrid_tweak";
+    io["config"] = "p" + stringify(param["processors"]) + "-" + io["algo"]+ "_method" + "-" + tweak + "-" ;
+    io["stat"] = path + io["config"] +io["stat"];
     
 }
 
@@ -226,7 +237,7 @@ void gatherAllInfo()
     autoAdjustParam();
     printParam(param,cout);
     printParam(io,cout);
-    ofstream temp((io["path"]+"param.txt").c_str());
+    ofstream temp((io["path"]+io["config"]+"param.txt").c_str());
     printParam(param,temp);
     temp.close();
     //    floydWarshallWithPath();
