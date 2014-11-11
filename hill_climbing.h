@@ -35,19 +35,19 @@ public:
             R = S;
             tweak(R);
             eval(R);
-            
+
             //update time
             elapsedTime();
-            
+
             if (R > S)
             {
                 S = R;
-                cout << "Fitness updated at gen: " << gen << " sec:" << passedTime <<" . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / S.fitness() << " , "<<S.fitness() << " , " << S.avgLoad() << " , " << S.stdDevLoad() << endl;
+                cout << "Fitness updated at gen: " << gen << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / S.fitness() << " , " << S.fitness() << " , " << S.avgLoad() << " , " << S.stdDevLoad() << endl;
                 stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
-
             }
         }
         while (passedTime < param["maxTime"]);
+        stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
         stat.close();
         cout << endl << "Total Time:" << passedTime << endl;
 
