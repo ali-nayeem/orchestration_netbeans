@@ -1,6 +1,6 @@
-input MPEG
+input DES
 map mapping.csv
 stat stat.csv
 indi indi.txt
 indiLoad indiLoad.txt
-algo single
+algo pop
