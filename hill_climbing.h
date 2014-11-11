@@ -47,7 +47,7 @@ public:
             }
         }
         while (passedTime < param["maxTime"]);
-        stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+        stat << param["maxTime"] << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
         stat.close();
         cout << endl << "Total Time:" << passedTime << endl;
 

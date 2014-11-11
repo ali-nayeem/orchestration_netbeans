@@ -104,7 +104,7 @@ public:
             elapsedTime();
         }
         while (passedTime < param["maxTime"]);
-        stat << passedTime << "," << SERIAL_LOAD / Best.fitness()  << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
+        stat << param["maxTime"] << "," << SERIAL_LOAD / Best.fitness()  << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
         stat.close();
         cout<< "Final sec:" << passedTime <<" . Final speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
         //return Best;
