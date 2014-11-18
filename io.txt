@@ -1,4 +1,4 @@
-input FFT
+input DES
 map mapping.csv
 stat stat.csv
 indi indi.txt

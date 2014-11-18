@@ -58,6 +58,7 @@ void main_function(int argc, char **argv)
     //SteepestAscent<Indi> sa(tweak,eval);
     //SteepestAscentWithReplacement<Indi> sar(tweak,eval);
     //SimulatedAnnealing<Indi> simAnn(tweak,eval);
+    //NewIdea<Indi> ni(exploit,explore, eval, param["maxGen"]);
 
     //initial print
     //cout << "Initial Solution:" << endl;

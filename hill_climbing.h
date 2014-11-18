@@ -241,5 +241,71 @@ private:
 
 };
 
+template <class EOT>
+class NewIdea
+{
+public:
+
+    // added this second ctor as I didn't like the ordering of the parameters
+    // in the one above. Any objection :-) MS
+
+    NewIdea(eoMonOp<EOT>& _exploit, eoMonOp<EOT>& _explore,eoEvalFunc<EOT>& _eval, int _maxGen) : exploit(_exploit),explore(_explore), eval(_eval), maxGen(_maxGen)
+    {
+    }
+
+    void operator()(EOT & S)
+    {
+        int gen = 0;
+        EOT R;
+        ofstream stat(io["stat"].c_str());
+        eoTimeCounter elapsedTime;
+        double & passedTime = elapsedTime.value();
+        stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+        do
+        {
+            //update time
+            elapsedTime();
+            gen++;
+
+            R = S;
+            
+            exploit(R);
+            eval(R);
+            
+            if (R > S)
+            {
+                S = R;
+                cout << "Fitness updated at gen: " << gen << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / S.fitness() << " , " << S.fitness() << " , " << S.avgLoad() << " , " << S.stdDevLoad() << endl;
+                stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+            }
+            //update time
+            //elapsedTime();
+            explore(R);
+            eval(R);
+            if (R > S)
+            {
+                S = R;
+                cout << "Fitness updated at gen: " << gen << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / S.fitness() << " , " << S.fitness() << " , " << S.avgLoad() << " , " << S.stdDevLoad() << endl;
+                stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+            }
+        }
+        while (passedTime < param["maxTime"]);
+        stat << param["maxTime"] << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+        stat.close();
+        cout << endl << "Total Time:" << passedTime << endl;
+
+    }
+
+private:
+    /// eoInvalidateMonOp invalidates the embedded operator
+    eoInvalidateMonOp<EOT> exploit;
+    eoInvalidateMonOp<EOT> explore;
+
+    // eoInvalidateQuadOp invalidates the embedded operator
+    eoEvalFunc<EOT>& eval;
+    int maxGen;
+
+};
+
 #endif	/* HILL_CLIMBING_H */
 
