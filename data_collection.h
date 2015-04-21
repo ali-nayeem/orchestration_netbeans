@@ -156,6 +156,7 @@ void readData()
     EXECUTION_TIME = new double[ACTORS];
     ACTOR_LOAD = new double[ACTORS];
     ACTOR_LIST = new unsigned[ACTORS];
+    SERIAL_LOAD = 0;
     for (unsigned i = 0; i < ACTORS; i++)
     {
         ACTOR_LIST[i] = i;
