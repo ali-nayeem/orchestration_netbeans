@@ -4,7 +4,7 @@
 rExploit 0.7
 exploreThreshold 0.1
 maxGen 200000
-maxTime 100
+maxTime 5
 nTweaks 10
 popSize 16
 elite   4
