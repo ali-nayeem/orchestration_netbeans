@@ -3,11 +3,14 @@
 #pCross 0.003
 rExploit 0.7
 exploreThreshold 0.1
-maxGen 200000
+maxGen 30000
 maxTime 5
 nTweaks 10
-popSize 16
+popSize 20
 elite   4
 tFit 4
 processors 8
 seed 1413089664
+steadyGen 20
+hcIter 100
+convergeGen 5000

@@ -1,0 +1,1 @@
+Final parameters:#pCross=0.003,#pMut=0.008,#pSwap=0.05,convergeGen=5000,elite=4,exploreThreshold=0.1,hcIter=100,maxGen=30000,maxTime=5,nTweaks=10,pCross=0.0545455,pMut=0.0545455,pSwap=0.349091,popSize=20,processors=8,rExploit=0.7,seed=1.41309e+009,steadyGen=10,tFit=4,

@@ -102,7 +102,7 @@ void ga_run()
     
     
     //termination
-    eoTimeContinue<Indi> continuator((time_t) param["maxTime"]);
+    eoGenContinue<Indi> continuator((time_t) param["maxGen"]);
     //CHECKPOINT
     eoCheckPoint<Indi> checkpoint(continuator);
     // Create a counter parameter
@@ -133,7 +133,7 @@ void ga_run()
     monitor.add(SecondStat);
 
     //THE ALGORITHM
-    ourGA <Indi> ga(select, xover, explore, eval, checkpoint, fairRandom);
+    HybridGA <Indi> ga(select, xover, explore, eval, checkpoint, fullyRandom,param["steadyGen"],param["hcIter"]);
     //Bismillah
     ga(pop);
 

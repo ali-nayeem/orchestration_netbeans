@@ -24,10 +24,10 @@ public:
     {
         int gen = 0;
         EOT R;
-        ofstream stat(io["stat"].c_str());
+       // ofstream stat(io["stat"].c_str());
         eoTimeCounter elapsedTime;
         double & passedTime = elapsedTime.value();
-        stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+      //  stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
         do
         {
             gen++;
@@ -42,13 +42,13 @@ public:
             if (R > S)
             {
                 S = R;
-                cout << "Fitness updated at gen: " << gen << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / S.fitness() << " , " << S.fitness() << " , " << S.avgLoad() << " , " << S.stdDevLoad() << endl;
-                stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+                cout << "HC Fitness updated at gen: " << gen << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / S.fitness() << " , " << S.fitness() << " , " << S.avgLoad() << " , " << S.stdDevLoad() << endl;
+            //    stat << "," << gen <<passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
             }
         }
-        while (passedTime < param["maxTime"]);
-        stat << param["maxTime"] << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
-        stat.close();
+        while (gen < maxGen);
+       // stat << param["maxTime"] << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+       // stat.close();
         cout << endl << "Total Time:" << passedTime << endl;
 
     }
