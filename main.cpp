@@ -19,8 +19,8 @@ using namespace std;
 #include "initialization.h"
 #include "fitness_evaluation.h"
 #include "tweak.h"
-#include "hill_climbing.h"
 #include "quad_crossover.h"
+#include "hill_climbing.h"
 #include "genetic_algorithm.h"
 
 typedef eoMinimizingFitness MyFitT;
@@ -47,17 +47,22 @@ void main_function(int argc, char **argv)
     eval(initialSolution);
 
     //tweaks
+    OptimisticTweak<Indi> opTweak;
     UniformMonCrossOver<Indi> exploit;
     Mutation<Indi> explore;
-    eoPropCombinedMonOp<Indi> tweak(exploit, param["rExploit"]);
-    tweak.add(explore, 1 - param["rExploit"], true);
+    GuidedMutation<Indi> gExplore;
+    eoPropCombinedMonOp<Indi> tweak(opTweak, 0.5);
+    tweak.add(exploit, 0.5, true);
+   // tweak.add(gExplore, 0.2, true);
+   // tweak.add(explore, 0.1, true);
     //HybridTweak<Indi> hybridTweak(exploit, explore);
 
     //THE ALGORITHM
-    HillClimbing<Indi> hc(tweak, eval, param["maxGen"]);
+    HillClimbing<Indi> hc(exploit, eval, param["maxGen"]);
+    HybridHillClimbing<Indi> hcga(exploit, eval, param["maxGen"]);
     //SteepestAscent<Indi> sa(tweak,eval);
     //SteepestAscentWithReplacement<Indi> sar(tweak,eval);
-    //SimulatedAnnealing<Indi> simAnn(tweak,eval);
+    SimulatedAnnealing<Indi> simAnn(tweak,eval,param["maxGen"]);
     //NewIdea<Indi> ni(exploit,explore, eval, param["maxGen"]);
 
     //initial print
@@ -65,7 +70,7 @@ void main_function(int argc, char **argv)
     //initialSolution.print();
 
     //In the name of Allah
-    hc(initialSolution);
+    hcga(initialSolution);
 
     //final print
     cout << "Final" << endl << initialSolution << endl;
@@ -96,11 +101,11 @@ void ga_run()
 
     //mutations
     //UniformMonCrossOver<Indi> exploit;
-    Mutation<Indi> explore;
+    GuidedMutation<Indi> explore;
     //eoPropCombinedMonOp<Indi> tweak(exploit, param["rExploit"]);
     //tweak.add(explore, 1 - param["rExploit"], true);
-    
-    
+
+
     //termination
     eoGenContinue<Indi> continuator((time_t) param["maxGen"]);
     //CHECKPOINT
@@ -133,9 +138,20 @@ void ga_run()
     monitor.add(SecondStat);
 
     //THE ALGORITHM
-    HybridGA <Indi> ga(select, xover, explore, eval, checkpoint, fullyRandom,param["steadyGen"],param["hcIter"]);
+    //HybridGAchild <Indi> ga(select, xover, explore, eval, checkpoint, fairRandom,param["steadyGen"],param["hcIter"]);
+    GAforHC <Indi> ga(select, xover, explore, eval,param["hcIter"]);
+    
     //Bismillah
-    ga(pop);
+    
+    Indi initialSolution;
+    fairRandom(initialSolution);
+    eval(initialSolution);
+    for(int i =0; i<param["maxGen"];i++)
+    {
+        ga.setInitialSol(initialSolution);
+        ga(pop);
+        initialSolution = ga.Best;
+    }
 
     //cout<<pop.best_element().fitness()<<endl<<pop.worse_element().fitness()<<endl;
 

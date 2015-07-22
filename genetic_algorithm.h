@@ -485,10 +485,10 @@ public:
         UniformMonCrossOver<EOT> exploit;
         Mutation<EOT> explore;
         GuidedMutation<EOT> gExplore;
-        eoPropCombinedMonOp<EOT> tweak(opTweak, 0.6);
-        //tweak.add(exploit, 0.3, true);
+        eoPropCombinedMonOp<EOT> tweak(opTweak, 0.2);
+        tweak.add(exploit, 0.1, true);
         tweak.add(gExplore, 0.3, true);
-        tweak.add(explore, 0.1, true);
+        tweak.add(explore, 0.4, true);
         eoMonOp<EOT>& iTweak(tweak);
         //HillClimbing<EOT> hc(exploit, eval, hcIter);
         //initialization
@@ -503,8 +503,12 @@ public:
                     indiv.invalidate();
                 }
                 eval(indiv);
+                if(indiv.fitness() != initialSol.fitness())
+                {
+                    break;
+                }
             }
-            cout << indiv.fitness();
+           // cout << indiv.fitness();
             P.push_back(indiv);
         }
         apply<EOT > (eval, P);
@@ -516,7 +520,7 @@ public:
             {
                 Best = P.best_element();
                 stat << passedTime << "," << SERIAL_LOAD / Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
-                cout << "Fitness updated at gen: " << genCount << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
+                cout << "GAforHC Fitness updated at gen: " << genCount << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
                 break;
             }
             //selection
@@ -594,7 +598,7 @@ public:
 
     void operator()(EOT & S)
     {
-        int gen = 0, steadyCount = 0;
+        int gen = 0, steadyCount = 0, convergeCount = 0;
         //population
         eoPop<EOT> pop;
         //selection
@@ -634,12 +638,23 @@ public:
             else
             {
                 steadyCount++;
-                if (steadyCount > param["hcSteadyGen"])
+                if (steadyCount > (ACTORS+EDGES)*10)
                 {
+                    convergeCount++;
+                    //cout<<convergeCount<<endl;
+                    if(convergeCount > param["GAHConverge"])
+                    {
+                        break;
+                    }
                     ga.setInitialSol(S);
                     ga(pop);
-                    S = ga.Best;
+                    if(ga.Best > S)
+                    {
+                        S = ga.Best;
+                        convergeCount = 0;
+                    }
                     steadyCount = 0;
+                    
                 }
 
             }

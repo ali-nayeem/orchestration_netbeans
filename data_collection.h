@@ -221,7 +221,7 @@ void autoAdjustParam()
     }
     if(param["pCross"] == 0)
     {
-        param["pCross"] = param["pMut"];
+        param["pCross"] = 40.0 / ACTORS;
     }
     if(param["seed"] == 0)
     {

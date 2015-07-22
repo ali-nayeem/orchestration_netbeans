@@ -24,10 +24,10 @@ public:
     {
         int gen = 0;
         EOT R;
-       // ofstream stat(io["stat"].c_str());
+        // ofstream stat(io["stat"].c_str());
         eoTimeCounter elapsedTime;
         double & passedTime = elapsedTime.value();
-      //  stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+        //  stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
         do
         {
             gen++;
@@ -43,12 +43,12 @@ public:
             {
                 S = R;
                 cout << "HC Fitness updated at gen: " << gen << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / S.fitness() << " , " << S.fitness() << " , " << S.avgLoad() << " , " << S.stdDevLoad() << endl;
-            //    stat << "," << gen <<passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+                //    stat << "," << gen <<passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
             }
         }
         while (gen < maxGen);
-       // stat << param["maxTime"] << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
-       // stat.close();
+        // stat << param["maxTime"] << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+        // stat.close();
         cout << endl << "Total Time:" << passedTime << endl;
 
     }
@@ -167,6 +167,7 @@ public:
             elapsedTime();
         }
         while (elapsedTime.value() < param["maxTime"]);
+        S = Best;
         stat.close();
         cout << endl << "Total Time:" << elapsedTime.value() << endl;
     }
@@ -187,17 +188,17 @@ public:
     // added this second ctor as I didn't like the ordering of the parameters
     // in the one above. Any objection :-) MS
 
-    SimulatedAnnealing(eoMonOp<EOT>& _tweak, eoEvalFunc<EOT>& _eval) : tweak(_tweak), eval(_eval)
+    SimulatedAnnealing(eoMonOp<EOT>& _tweak, eoEvalFunc<EOT>& _eval, int _maxGen) : tweak(_tweak), eval(_eval), maxGen(_maxGen)
     {
     }
 
     void operator()(EOT & S)
     {
         int gen = 0;
-        double totalTime = param["maxTime"], pChoose, exp;
+        double temp = param["initTemp"], pChoose, exp, coolingRate = param["coolingRate"];
         EOT R;
         EOT Best = S;
-        ofstream stat(io["stat"].c_str());
+        // ofstream stat(io["stat"].c_str());
         eoTimeCounter elapsedTime;
         double & passedTime = elapsedTime.value();
         do
@@ -208,27 +209,28 @@ public:
             tweak(R);
             eval(R);
 
-            exp = (S.fitness() - R.fitness()) / (totalTime - passedTime);
+            exp = (SERIAL_LOAD / R.fitness() - SERIAL_LOAD / S.fitness()) / temp;
             pChoose = pow(E, exp);
 
             if (R > S || rng.uniform() < pChoose)
             {
                 S = R;
             }
-
+            temp = temp * coolingRate;
             //cout << pChoose << endl;
 
             if (S > Best)
             {
                 Best = S;
-                cout << "Fitness updated at gen: " << gen << ". New Fitness, avg, stdDev: " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
+                cout << "SimAnn Fitness updated at gen: " << gen << ". New Fitness, avg, stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
             }
-            stat << Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << SERIAL_LOAD / Best.fitness() << endl;
+            //stat << Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << SERIAL_LOAD / Best.fitness() << endl;
 
             elapsedTime();
         }
-        while (passedTime < totalTime);
-        stat.close();
+        while (gen < maxGen);
+        S = Best;
+        // stat.close();
         cout << endl << "Total Time:" << passedTime << endl;
 
     }
@@ -238,6 +240,7 @@ private:
     eoInvalidateMonOp<EOT> tweak;
     // eoInvalidateQuadOp invalidates the embedded operator
     eoEvalFunc<EOT>& eval;
+    int maxGen;
 
 };
 
@@ -249,7 +252,7 @@ public:
     // added this second ctor as I didn't like the ordering of the parameters
     // in the one above. Any objection :-) MS
 
-    NewIdea(eoMonOp<EOT>& _exploit, eoMonOp<EOT>& _explore,eoEvalFunc<EOT>& _eval, int _maxGen) : exploit(_exploit),explore(_explore), eval(_eval), maxGen(_maxGen)
+    NewIdea(eoMonOp<EOT>& _exploit, eoMonOp<EOT>& _explore, eoEvalFunc<EOT>& _eval, int _maxGen) : exploit(_exploit), explore(_explore), eval(_eval), maxGen(_maxGen)
     {
     }
 
@@ -268,10 +271,10 @@ public:
             gen++;
 
             R = S;
-            
+
             exploit(R);
             eval(R);
-            
+
             if (R > S)
             {
                 S = R;

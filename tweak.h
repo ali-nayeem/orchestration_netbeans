@@ -177,5 +177,126 @@ private:
     // END   Private data of an HybridTweak object
 };
 
+template<class GenotypeT>
+class OptimisticTweak : public eoMonOp<GenotypeT>
+{
+public:
+    /**
+     * Ctor - no requirement
+     */
+    // START eventually add or modify the anyVariable argument
+
+    OptimisticTweak()
+    //  OptimisticTweak( varType  _anyVariable) : anyVariable(_anyVariable)
+    // END eventually add or modify the anyVariable argument
+    {
+
+        // START Code of Ctor of an OptimisticTweak object
+        // END   Code of Ctor of an OptimisticTweak object
+    }
+
+    /// The class name. Used to display statistics
+
+    string className() const
+    {
+        return "OptimisticTweak";
+    }
+
+    /**
+     * modifies the parent
+     * @param _genotype The parent genotype (will be modified)
+     */
+    bool operator()(GenotypeT & _genotype)
+    {
+        // START code for mutation of the _genotype object
+        bool invalid = false;
+        unsigned maxProc = _genotype.rouletteWheelForMaxProcessor();
+        unsigned otherProc = rng.random(PROCESSORS);
+        while (maxProc == otherProc)
+        {
+            otherProc = rng.random(PROCESSORS);
+        }
+
+        for (int actor = 0; actor < ACTORS; actor++)
+        {
+            if (param["pSwap"] >= rng.uniform())
+            {
+                if (_genotype.contains(maxProc, actor) != _genotype.contains(otherProc, actor))
+                {
+                    _genotype.swap(maxProc, otherProc, actor);
+                    invalid = true;
+                }
+            }
+        }
+
+        return invalid;
+        // END code for mutation of the _genotype object
+    }
+
+private:
+    // START Private data of an OptimisticTweak object
+    // END   Private data of an OptimisticTweak object
+};
+template<class GenotypeT>
+class GuidedMutation : public eoMonOp<GenotypeT>
+{
+public:
+    /**
+     * Ctor - no requirement
+     */
+    // START eventually add or modify the anyVariable argument
+
+    GuidedMutation()
+    //  GuidedMutation( varType  _anyVariable) : anyVariable(_anyVariable)
+    // END eventually add or modify the anyVariable argument
+    {
+
+        // START Code of Ctor of an GuidedMutation object
+        // END   Code of Ctor of an GuidedMutation object
+    }
+
+    /// The class name. Used to display statistics
+
+    string className() const
+    {
+        return "GuidedMutation";
+    }
+
+    /**
+     * modifies the parent
+     * @param _genotype The parent genotype (will be modified)
+     */
+    bool operator()(GenotypeT & _genotype)
+    {
+        // START code for mutation of the _genotype object
+        bool invalid = false;
+        unsigned maxProc = _genotype.rouletteWheelForMaxProcessor();
+        for (unsigned actor = 0; actor < ACTORS; actor++)
+        {
+            if(_genotype[actor] != maxProc)
+            {
+                continue;
+            }
+            if (param["pMut"] >= rng.uniform())
+            {
+                unsigned oldProc = _genotype[actor];
+                unsigned newProc = rng.random(PROCESSORS);
+                while (oldProc == newProc)
+                {
+                    newProc = rng.random(PROCESSORS);
+                }
+                _genotype.assignActor(actor, newProc);
+                invalid = true;
+            }
+        }
+        return invalid;
+        // END code for mutation of the _genotype object
+    }
+
+private:
+    // START Private data of an GuidedMutation object
+    // END   Private data of an GuidedMutation object
+};
+
 #endif	/* TWEAK_H */
 
