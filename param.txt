@@ -10,12 +10,12 @@ popSize 20
 elite   2
 tFit 4
 processors 8
-#seed 1413089664
+seed 1413089664
 steadyGen 50
-hcIter 100
+hcIter 5
 convergeGen 5000
 initTemp 0.5
 coolingRate 0.98
 hcSteadyGen 1000
 GAHCmaxGen 500
-GAHConverge 1000
+GAHConverge 500

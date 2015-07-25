@@ -540,12 +540,14 @@ public:
                 {
                     Q[2 * i].invalidate();
                     Q[2 * i + 1].invalidate();
+                    eval(Q[2 * i]);
+                    eval(Q[2 * i + 1]);
                 }
-                if (mutate(Q[2 * i]))
+                if (tweak(Q[2 * i]))
                 {
                     Q[2 * i].invalidate();
                 }
-                if (mutate(Q[2 * i + 1]))
+                if (tweak(Q[2 * i + 1]))
                 {
                     Q[2 * i + 1].invalidate();
                 }

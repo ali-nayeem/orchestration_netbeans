@@ -1,6 +1,0 @@
-# Package Information for pkg-config
-Name: Evolving Objects
-Description: Evolving Objects
-Version: ..
-Libs: -L/usr/lib -leoutils -leo -les -lga -lcma -lgcov
-Cflags: -I/usr/include/eo
