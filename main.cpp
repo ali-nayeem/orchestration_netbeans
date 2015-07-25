@@ -53,16 +53,16 @@ void main_function(int argc, char **argv)
     GuidedMutation<Indi> gExplore;
     eoPropCombinedMonOp<Indi> tweak(opTweak, 0.5);
     tweak.add(exploit, 0.5, true);
-   // tweak.add(gExplore, 0.2, true);
-   // tweak.add(explore, 0.1, true);
+    // tweak.add(gExplore, 0.2, true);
+    // tweak.add(explore, 0.1, true);
     //HybridTweak<Indi> hybridTweak(exploit, explore);
 
     //THE ALGORITHM
-    HillClimbing<Indi> hc(exploit, eval, param["maxGen"]);
+    HillClimbing<Indi> hc(gExplore, eval, param["maxGen"]);
     HybridHillClimbing<Indi> hcga(exploit, eval, param["maxGen"]);
     //SteepestAscent<Indi> sa(tweak,eval);
     //SteepestAscentWithReplacement<Indi> sar(tweak,eval);
-    SimulatedAnnealing<Indi> simAnn(tweak,eval,param["maxGen"]);
+    SimulatedAnnealing<Indi> simAnn(tweak, eval, param["maxGen"]);
     //NewIdea<Indi> ni(exploit,explore, eval, param["maxGen"]);
 
     //initial print
@@ -70,7 +70,7 @@ void main_function(int argc, char **argv)
     //initialSolution.print();
 
     //In the name of Allah
-    hcga(initialSolution);
+    hc(initialSolution);
 
     //final print
     cout << "Final" << endl << initialSolution << endl;
@@ -100,11 +100,15 @@ void ga_run()
     MappingQuadCrossover<Indi> xover;
 
     //mutations
-    //UniformMonCrossOver<Indi> exploit;
-    GuidedMutation<Indi> explore;
-    //eoPropCombinedMonOp<Indi> tweak(exploit, param["rExploit"]);
-    //tweak.add(explore, 1 - param["rExploit"], true);
-
+    //GuidedMutation<Indi> explore;
+    OptimisticTweak<Indi> opTweak;
+    UniformMonCrossOver<Indi> exploit;
+    Mutation<Indi> explore;
+    GuidedMutation<Indi> gExplore;
+    eoPropCombinedMonOp<Indi> tweak(opTweak, 0.2);
+    tweak.add(exploit, 0.1, true);
+    tweak.add(gExplore, 0.3, true);
+    tweak.add(explore, 0.4, true);
 
     //termination
     eoGenContinue<Indi> continuator((time_t) param["maxGen"]);
@@ -138,20 +142,21 @@ void ga_run()
     monitor.add(SecondStat);
 
     //THE ALGORITHM
-    //HybridGAchild <Indi> ga(select, xover, explore, eval, checkpoint, fairRandom,param["steadyGen"],param["hcIter"]);
-    GAforHC <Indi> ga(select, xover, explore, eval,param["hcIter"]);
-    
+    ourGA <Indi> ga(select, xover, tweak, eval, checkpoint, fairRandom);
+    HybridGA<Indi> hga(select, xover, tweak, eval, checkpoint, fairRandom,param["steadyGen"],(ACTORS+EDGES)*10);
+    //GAforHC <Indi> ga(select, xover, explore, eval, param["hcIter"]);
+
     //Bismillah
-    
-    Indi initialSolution;
-    fairRandom(initialSolution);
-    eval(initialSolution);
-    for(int i =0; i<param["maxGen"];i++)
-    {
-        ga.setInitialSol(initialSolution);
-        ga(pop);
-        initialSolution = ga.Best;
-    }
+     hga(pop);
+//    Indi initialSolution;
+//    fairRandom(initialSolution);
+//    eval(initialSolution);
+//    for (int i = 0; i < param["maxGen"]; i++)
+//    {
+//        ga.setInitialSol(initialSolution);
+//        ga(pop);
+//        initialSolution = ga.Best;
+//    }
 
     //cout<<pop.best_element().fitness()<<endl<<pop.worse_element().fitness()<<endl;
 

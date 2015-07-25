@@ -86,6 +86,8 @@ public:
                 {
                     Q[2 * i].invalidate();
                     Q[2 * i + 1].invalidate();
+                    eval(Q[2 * i]);
+                    eval(Q[2 * i + 1]);
                 }
                 if (mutate(Q[2 * i]))
                 {
@@ -229,6 +231,8 @@ public:
                 {
                     Q[2 * i].invalidate();
                     Q[2 * i + 1].invalidate();
+                    eval(Q[2 * i]);
+                    eval(Q[2 * i + 1]);
                 }
                 if (mutate(Q[2 * i]))
                 {
@@ -489,7 +493,6 @@ public:
         tweak.add(exploit, 0.1, true);
         tweak.add(gExplore, 0.3, true);
         tweak.add(explore, 0.4, true);
-        eoMonOp<EOT>& iTweak(tweak);
         //HillClimbing<EOT> hc(exploit, eval, hcIter);
         //initialization
         P.push_back(initialSol);
