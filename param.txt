@@ -13,9 +13,9 @@ processors 8
 seed 1413089664
 steadyGen 1000
 hcIter 10
-convergeGen 50000
+convergeGen 5000
 initTemp 0.5
 coolingRate 0.98
 hcSteadyGen 1000
 GAHCmaxGen 500
-GAHConverge 300
+GAHConverge 500
