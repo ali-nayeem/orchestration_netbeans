@@ -4,7 +4,7 @@
 rExploit 1.0
 exploreThreshold 0.1
 maxGen 40000000
-maxTime 5
+maxTime 600
 nTweaks 10
 popSize 20
 elite   2
@@ -19,4 +19,4 @@ coolingRate 0.98
 hcSteadyGen 1000
 GAHCmaxGen 500
 GAHConverge 500
-totalExp 3
+totalExp 1
