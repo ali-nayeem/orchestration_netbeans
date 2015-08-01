@@ -16,7 +16,7 @@ public:
     // added this second ctor as I didn't like the ordering of the parameters
     // in the one above. Any objection :-) MS
 
-    HillClimbing(eoMonOp<EOT>& _tweak, eoEvalFunc<EOT>& _eval, int _maxGen) : tweak(_tweak), eval(_eval), maxGen(_maxGen)
+    HillClimbing(eoMonOp<EOT>& _tweak, eoEvalFunc<EOT>& _eval, int _maxGen, bool _saveStat) : tweak(_tweak), eval(_eval), maxGen(_maxGen), saveStat(_saveStat)
     {
     }
 
@@ -25,9 +25,12 @@ public:
         int gen = 0;
         EOT R;
         // ofstream stat(io["stat"].c_str());
-        eoTimeCounter elapsedTime;
-        double & passedTime = elapsedTime.value();
-        //  stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+        Timer elapsedTime;
+        const double & passedTime = elapsedTime.value();
+        if (saveStat)
+        {
+            stat << gen << " " << passedTime << " " << SERIAL_LOAD / S.fitness() << endl;
+        }
         do
         {
             gen++;
@@ -36,18 +39,25 @@ public:
             tweak(R);
             eval(R);
 
-            //update time
-            elapsedTime();
-
             if (R > S)
             {
                 S = R;
                 cout << "HC Fitness updated at gen: " << gen << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / S.fitness() << " , " << S.fitness() << " , " << S.avgLoad() << " , " << S.stdDevLoad() << endl;
+                if (saveStat)
+                {
+                    stat << gen << " " << passedTime << " " << SERIAL_LOAD / S.fitness() << endl;
+                }
                 //    stat << "," << gen <<passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
             }
+
+            //update time
+            elapsedTime();
         }
-        while (gen < maxGen);
-        // stat << param["maxTime"] << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+        while (passedTime < param["maxTime"] || gen < maxGen);
+        if (saveStat)
+        {
+            stat << gen << " " << param["maxTime"] << " " << SERIAL_LOAD / S.fitness() << endl;
+        }
         // stat.close();
         cout << endl << "Total Time:" << passedTime << endl;
 
@@ -59,6 +69,7 @@ private:
     // eoInvalidateQuadOp invalidates the embedded operator
     eoEvalFunc<EOT>& eval;
     int maxGen;
+    bool saveStat;
 
 };
 
@@ -79,8 +90,8 @@ public:
         int gen = 0;
         EOT R;
         EOT W;
-        ofstream stat(io["stat"].c_str());
-        eoTimeCounter elapsedTime;
+        //ofstream stat(io["stat"].c_str());
+        Timer elapsedTime;
         do
         {
             gen++;
@@ -108,7 +119,7 @@ public:
             elapsedTime();
         }
         while (elapsedTime.value() < param["maxTime"]);
-        stat.close();
+        //stat.close();
         cout << endl << "Total Time:" << elapsedTime.value() << endl;
 
     }
@@ -137,8 +148,8 @@ public:
         EOT W;
         EOT Best;
         Best = S;
-        ofstream stat(io["stat"].c_str());
-        eoTimeCounter elapsedTime;
+        //ofstream stat(io["stat"].c_str());
+        Timer elapsedTime;
         do
         {
             gen++;
@@ -168,7 +179,7 @@ public:
         }
         while (elapsedTime.value() < param["maxTime"]);
         S = Best;
-        stat.close();
+        //stat.close();
         cout << endl << "Total Time:" << elapsedTime.value() << endl;
     }
 
@@ -199,8 +210,8 @@ public:
         EOT R;
         EOT Best = S;
         // ofstream stat(io["stat"].c_str());
-        eoTimeCounter elapsedTime;
-        double & passedTime = elapsedTime.value();
+        Timer elapsedTime;
+        const double & passedTime = elapsedTime.value();
         do
         {
             gen++;
@@ -260,9 +271,9 @@ public:
     {
         int gen = 0;
         EOT R;
-        ofstream stat(io["stat"].c_str());
-        eoTimeCounter elapsedTime;
-        double & passedTime = elapsedTime.value();
+        //ofstream stat(io["stat"].c_str());
+        Timer elapsedTime;
+        const double & passedTime = elapsedTime.value();
         stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
         do
         {
@@ -294,7 +305,7 @@ public:
         }
         while (passedTime < param["maxTime"]);
         stat << param["maxTime"] << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
-        stat.close();
+        //stat.close();
         cout << endl << "Total Time:" << passedTime << endl;
 
     }

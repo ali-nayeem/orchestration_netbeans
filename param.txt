@@ -19,3 +19,4 @@ coolingRate 0.98
 hcSteadyGen 1000
 GAHCmaxGen 500
 GAHConverge 500
+totalExp 3

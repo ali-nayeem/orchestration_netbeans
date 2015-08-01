@@ -11,6 +11,8 @@
 #include <climits>
 #include <list>
 #define E 2.7183
+#define TOTAL_DATASETS 7
+string datasets[] = {"DES", "FFT", "FMRadio", "MPEG", "Serpent", "TDE", "Vocoder"};
 
 
 using namespace std;
@@ -36,11 +38,10 @@ double ** COST_ADJ_MAT;
 double * EXECUTION_TIME, SERIAL_LOAD = 0.0, *ACTOR_LOAD;
 unsigned ACTORS, EDGES, PROCESSORS, *ACTOR_LIST;
 ofstream stat;
+ofstream globalFinalResult;
 
 map<string, float> param; //list of parameters
 map<string, string> io; //list of io filenames
-
-#endif	/* DATA_COLLECTION_H */
 
 void readParam()
 {
@@ -61,6 +62,7 @@ template <class  Type> void printParam(Type param,ostream & out)
 {
     typename Type::iterator it;
     out<<"Final parameters:";
+    out<<"Serial load:"<<SERIAL_LOAD<<endl;
     for(it = param.begin(); it != param.end(); it++)
     {
         out<< (*it).first <<"="<< (*it).second <<",";
@@ -94,8 +96,8 @@ void readIO()
     string path = "data/"+io["input"]+"/";
     io["path"] = path;
     io["input"] = path + io["input"] + "-inputga.dat"; //data/DES/DES-inputga.dat
-    string tweak = (param["rExploit"] == 0)? "normal_tweak":"hybrid_tweak";
-    io["config"] = "p" + stringify(param["processors"]) + "-" + io["algo"]+ "_method" + "-" + tweak + "-" ;
+    //string tweak = (param["rExploit"] == 0)? "normal_tweak":"hybrid_tweak";
+    io["config"] = "p" + stringify(param["processors"]) + "-" + io["algo"] + "-" ;
     io["stat"] = path + io["config"] +io["stat"];
     
 }
@@ -238,9 +240,17 @@ void gatherAllInfo()
     autoAdjustParam();
     printParam(param,cout);
     printParam(io,cout);
-    ofstream temp((io["path"]+io["config"]+"param.txt").c_str());
-    printParam(param,temp);
-    temp.close();
+    globalFinalResult.open( (io["path"]+io["config"]+"param.txt").c_str() );
+    stat.open(io["stat"].c_str());
+    printParam(param,globalFinalResult);
     //    floydWarshallWithPath();
     //    findDS();
 }
+void releaseAllInfo()
+{
+    io.clear();
+    param.clear();
+    globalFinalResult.close();
+    stat.close();
+}
+#endif	/* DATA_COLLECTION_H */

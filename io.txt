@@ -1,6 +1,7 @@
-input DES
+#input Serpent
 map mapping.csv
-stat stat.csv
+stat stat.txt
 indi indi.txt
 indiLoad indiLoad.txt
-algo pop
+algo hga
+#list hc-hcga-ga-hga

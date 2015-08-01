@@ -45,12 +45,11 @@ public:
 
     void operator()(eoPop<EOT>& P)
     {
-        ofstream stat(io["stat"].c_str());
+        //ofstream stat(io["stat"].c_str());
         eoPop<EOT> Q;
-        EOT Best;
         int genCount = 0;
-        eoTimeCounter elapsedTime;
-        double & passedTime = elapsedTime.value();
+        Timer elapsedTime;
+        const double & passedTime = elapsedTime.value();
         //initialization
         for (int i = 0; i < param["popSize"]; i++)
         {
@@ -66,7 +65,7 @@ public:
             if (P.best_element() > Best)
             {
                 Best = P.best_element();
-                stat << passedTime << "," << SERIAL_LOAD / Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
+                stat << genCount << " " << passedTime << " " << SERIAL_LOAD / Best.fitness() << endl;
                 cout << "Fitness updated at gen: " << genCount << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
             }
             //selection
@@ -105,9 +104,9 @@ public:
             genCount++;
             elapsedTime();
         }
-        while (genCount < param["maxGen"]);
-        stat << param["maxTime"] << "," << SERIAL_LOAD / Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
-        stat.close();
+        while (passedTime < param["maxTime"]);
+        stat << genCount << " " << param["maxTime"] << " " << SERIAL_LOAD / Best.fitness() << endl;
+        //stat.close();
         cout << "Final sec:" << passedTime << " . Final speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
         //return Best;
     }
@@ -124,7 +123,7 @@ private:
     void (*initializer)(EOT &);
 
 public:
-    EOT best;
+    EOT Best;
 
 };
 
@@ -154,15 +153,14 @@ public:
 
     void operator()(eoPop<EOT>& P)
     {
-        ofstream stat(io["stat"].c_str());
+        // ofstream stat(io["stat"].c_str());
         eoPop<EOT> Q;
-        EOT Best;
         int genCount = 0, steadyCount = 0, convergeCount = 0;
         bool steadyState = false;
-        eoTimeCounter elapsedTime;
-        double & passedTime = elapsedTime.value();
+        Timer elapsedTime;
+        const double & passedTime = elapsedTime.value();
         //hill climber
-        OptimisticTweak<EOT> opTweak;
+        //OptimisticTweak<EOT> opTweak;
         UniformMonCrossOver<EOT> exploit;
         //        Mutation<EOT> explore;
         //        GuidedMutation<EOT> gExplore;
@@ -170,7 +168,7 @@ public:
         //        tweak.add(exploit, 0.3, true);
         //        tweak.add(gExplore, 0.2, true);
         //        tweak.add(explore, 0.1, true);
-        HillClimbing<EOT> hc(exploit, eval, hcIter);
+        HillClimbing<EOT> hc(exploit, eval, hcIter, false);
         //SimulatedAnnealing<EOT> hc(exploit, eval, hcIter);
 
         //initialization
@@ -190,7 +188,7 @@ public:
             if (P.best_element() > Best)
             {
                 Best = P.best_element();
-                stat << genCount << "," << passedTime << "," << SERIAL_LOAD / Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
+                stat << genCount << " " << passedTime << " " << SERIAL_LOAD / Best.fitness() << endl;
                 cout << "GA Fitness updated at gen: " << genCount << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
                 //for steady state
                 steadyCount = 0;
@@ -206,10 +204,10 @@ public:
                 }
                 convergeCount++;
             }
-            if (convergeCount > param["convergeGen"])
-            {
-                break;
-            }
+            //            if (convergeCount > param["convergeGen"])
+            //            {
+            //                break;
+            //            }
             //selection
             select(P, Q); //select parents from P and put in Q
             //choose best individuals from P --- Elitism
@@ -219,10 +217,10 @@ public:
                 it = P.it_best_element();
                 Q.push_back(*it);
                 P.erase(it);
-                if (steadyState)
-                {
-                    // hc(Q[Q.size() - 1]);
-                }
+                //                if (steadyState)
+                //                {
+                //                     hc(Q[Q.size() - 1]);
+                //                }
             }
             //breeding
             for (unsigned i = 0; i < (param["popSize"] - param["elite"]) / 2; i++)
@@ -263,13 +261,13 @@ public:
             genCount++;
             elapsedTime();
         }
-        while (cont(P));
+        while (passedTime < param["maxTime"]);
         if (P.best_element() > Best)
         {
             Best = P.best_element();
         }
-        stat << genCount << "," << param["maxTime"] << "," << SERIAL_LOAD / Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
-        stat.close();
+        stat << genCount << " " <<param["maxTime"] << " " << SERIAL_LOAD / Best.fitness() << endl;
+        // stat.close();
         cout << "Final sec:" << passedTime << " . Final speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
         //return Best;
     }
@@ -288,7 +286,7 @@ private:
     int hcIter;
 
 public:
-    EOT best;
+    EOT Best;
 
 };
 
@@ -318,13 +316,12 @@ public:
 
     void operator()(eoPop<EOT>& P)
     {
-        ofstream stat(io["stat"].c_str());
+        //ofstream stat(io["stat"].c_str());
         eoPop<EOT> Q;
-        EOT Best;
         int genCount = 0, steadyCount = 0, convergeCount = 0;
         bool steadyState = false;
-        eoTimeCounter elapsedTime;
-        double & passedTime = elapsedTime.value();
+        Timer elapsedTime;
+        const double & passedTime = elapsedTime.value();
         //hill climber
         OptimisticTweak<EOT> opTweak;
         UniformMonCrossOver<EOT> exploit;
@@ -427,7 +424,7 @@ public:
             Best = P.best_element();
         }
         stat << genCount << "," << param["maxTime"] << "," << SERIAL_LOAD / Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
-        stat.close();
+        //stat.close();
         cout << "Final sec:" << passedTime << " . Final speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
         //return Best;
     }
@@ -446,7 +443,7 @@ private:
     int hcIter;
 
 public:
-    EOT best;
+    EOT Best;
 
 };
 
@@ -479,11 +476,11 @@ public:
     void operator()(eoPop<EOT>& P)
     {
         P.clear();
-        ofstream stat(io["stat"].c_str());
+        //ofstream stat(io["stat"].c_str());
         eoPop<EOT> Q;
         int genCount = 0;
-        eoTimeCounter elapsedTime;
-        double & passedTime = elapsedTime.value();
+        Timer elapsedTime;
+        const double & passedTime = elapsedTime.value();
         //hill climber
         OptimisticTweak<EOT> opTweak;
         UniformMonCrossOver<EOT> exploit;
@@ -506,12 +503,12 @@ public:
                     indiv.invalidate();
                 }
                 eval(indiv);
-                if(indiv.fitness() != initialSol.fitness())
+                if (indiv.fitness() != initialSol.fitness())
                 {
                     break;
                 }
             }
-           // cout << indiv.fitness();
+            // cout << indiv.fitness();
             P.push_back(indiv);
         }
         apply<EOT > (eval, P);
@@ -522,7 +519,7 @@ public:
             if (P.best_element() > Best)
             {
                 Best = P.best_element();
-                stat << passedTime << "," << SERIAL_LOAD / Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
+                //stat << passedTime << "," << SERIAL_LOAD / Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
                 cout << "GAforHC Fitness updated at gen: " << genCount << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
                 break;
             }
@@ -568,8 +565,8 @@ public:
         {
             Best = P.best_element();
         }
-        stat << param["maxTime"] << "," << SERIAL_LOAD / Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
-        stat.close();
+        //        stat << param["maxTime"] << "," << SERIAL_LOAD / Best.fitness() << "," << Best.avgLoad() << "," << Best.stdDevLoad() << "," << Best.fitness() << endl;
+        //        stat.close();
         cout << "Final sec:" << passedTime << " . Final speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
         //return Best;
     }
@@ -619,9 +616,9 @@ public:
 
         EOT R;
         // ofstream stat(io["stat"].c_str());
-        eoTimeCounter elapsedTime;
-        double & passedTime = elapsedTime.value();
-        //  stat << passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+        Timer elapsedTime;
+        const double & passedTime = elapsedTime.value();
+        stat << gen << " " << passedTime << " " << SERIAL_LOAD / S.fitness() << endl;
         do
         {
             gen++;
@@ -630,42 +627,41 @@ public:
             tweak(R);
             eval(R);
 
-            //update time
-            elapsedTime();
-
             if (R > S)
             {
                 S = R;
                 steadyCount = 0;
                 cout << "HC Fitness updated at gen: " << gen << " sec:" << passedTime << " . New speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / S.fitness() << " , " << S.fitness() << " , " << S.avgLoad() << " , " << S.stdDevLoad() << endl;
-                //    stat << "," << gen <<passedTime << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+                stat << gen << " " << passedTime << " " << SERIAL_LOAD / S.fitness() << endl;
             }
             else
             {
                 steadyCount++;
-                if (steadyCount > (ACTORS+EDGES)*10)
+                if (steadyCount > (ACTORS + EDGES)*10)
                 {
                     convergeCount++;
                     //cout<<convergeCount<<endl;
-                    if(convergeCount > param["GAHConverge"])
-                    {
-                        break;
-                    }
+                    //                    if(convergeCount > param["GAHConverge"])
+                    //                    {
+                    //                        break;
+                    //                    }
                     ga.setInitialSol(S);
                     ga(pop);
-                    if(ga.Best > S)
+                    if (ga.Best > S)
                     {
                         S = ga.Best;
                         convergeCount = 0;
                     }
                     steadyCount = 0;
-                    
+
                 }
 
             }
+            //update time
+            elapsedTime();
         }
-        while (gen < maxGen);
-        // stat << param["maxTime"] << "," << SERIAL_LOAD / S.fitness() << "," << S.avgLoad() << "," << S.stdDevLoad() << "," << S.fitness() << endl;
+        while (gen < maxGen || passedTime < param["maxTime"]);
+        stat << gen << " " << param["maxTime"] << " " << SERIAL_LOAD / S.fitness() << endl;
         // stat.close();
         cout << endl << "Total Time:" << passedTime << endl;
 
