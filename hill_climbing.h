@@ -16,7 +16,7 @@ public:
     // added this second ctor as I didn't like the ordering of the parameters
     // in the one above. Any objection :-) MS
 
-    HillClimbing(eoMonOp<EOT>& _tweak, eoEvalFunc<EOT>& _eval, int _maxGen, bool _saveStat) : tweak(_tweak), eval(_eval), maxGen(_maxGen), saveStat(_saveStat)
+    HillClimbing(eoMonOp<EOT>& _tweak, eoEvalFunc<EOT>& _eval, int _maxGen, bool _saveStat, int _maxTime) : tweak(_tweak), eval(_eval), maxGen(_maxGen), saveStat(_saveStat), maxTime(_maxTime)
     {
     }
 
@@ -53,10 +53,10 @@ public:
             //update time
             elapsedTime();
         }
-        while (passedTime < param["maxTime"] || gen < maxGen);
+        while (passedTime < maxTime || gen < maxGen);
         if (saveStat)
         {
-            stat << gen << " " << param["maxTime"] << " " << SERIAL_LOAD / S.fitness() << endl;
+            stat << gen << " " << maxTime << " " << SERIAL_LOAD / S.fitness() << endl;
         }
         // stat.close();
         cout << endl << "Total Time:" << passedTime << endl;
@@ -70,6 +70,7 @@ private:
     eoEvalFunc<EOT>& eval;
     int maxGen;
     bool saveStat;
+    int maxTime;
 
 };
 

@@ -168,7 +168,7 @@ public:
         //        tweak.add(exploit, 0.3, true);
         //        tweak.add(gExplore, 0.2, true);
         //        tweak.add(explore, 0.1, true);
-        HillClimbing<EOT> hc(exploit, eval, hcIter, false);
+        HillClimbing<EOT> hc(exploit, eval, hcIter, false,0);
         //SimulatedAnnealing<EOT> hc(exploit, eval, hcIter);
 
         //initialization

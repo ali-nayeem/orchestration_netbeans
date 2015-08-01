@@ -59,7 +59,7 @@ void hc()
     //HybridTweak<Indi> hybridTweak(exploit, explore);
 
     //THE ALGORITHM
-    HillClimbing<Indi> hc(exploit, eval, 0, true);
+    HillClimbing<Indi> hc(exploit, eval, 0, true, param["maxTime"]);
     //SteepestAscent<Indi> sa(tweak,eval);
     //SteepestAscentWithReplacement<Indi> sar(tweak,eval);
     //SimulatedAnnealing<Indi> simAnn(tweak, eval, param["maxGen"]);
