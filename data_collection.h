@@ -97,7 +97,12 @@ void readIO()
     io["path"] = path;
     io["input"] = path + io["input"] + "-inputga.dat"; //data/DES/DES-inputga.dat
     //string tweak = (param["rExploit"] == 0)? "normal_tweak":"hybrid_tweak";
-    io["config"] = "p" + stringify(param["processors"]) + "-" + io["algo"] + "-" ;
+    string tweak = "_" + io["tweak"];
+    if(io["algo"].compare("hcga") == 0 || io["algo"].compare("hga") == 0)
+    {
+        tweak = "";
+    }
+    io["config"] = "p" + stringify(param["processors"]) + "-" + io["algo"] + tweak + "-" ;
     io["stat"] = path + io["config"] +io["stat"];
     
 }

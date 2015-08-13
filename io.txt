@@ -3,5 +3,7 @@ map mapping.csv
 stat stat.txt
 indi indi.txt
 indiLoad indiLoad.txt
-algo hcga
+algo ga
 #list hc-hcga-ga-hga
+tweak tweak
+#list exploit-explore-opTweak-gExplore-tweak-revTweak

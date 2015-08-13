@@ -52,14 +52,34 @@ void hc(string currentData)
     UniformMonCrossOver<Indi> exploit;
     Mutation<Indi> explore;
     GuidedMutation<Indi> gExplore;
-    eoPropCombinedMonOp<Indi> tweak(opTweak, 0.5);
-    tweak.add(exploit, 0.5, true);
-    // tweak.add(gExplore, 0.2, true);
-    // tweak.add(explore, 0.1, true);
-    //HybridTweak<Indi> hybridTweak(exploit, explore);
+
+    eoPropCombinedMonOp<Indi> tweak(opTweak, 0.2);
+    tweak.add(exploit, 0.1, true);
+    tweak.add(gExplore, 0.3, true);
+    tweak.add(explore, 0.4, true);
+
+    eoPropCombinedMonOp<Indi> revTweak(opTweak, 0.3);
+    revTweak.add(exploit, 0.4, true);
+    revTweak.add(gExplore, 0.2, true);
+    revTweak.add(explore, 0.1, true);
+
+    map<string, eoMonOp<Indi>*> tweakList;
+    tweakList["exploit"] = &exploit;
+    tweakList["explore"] = &explore;
+    tweakList["opTweak"] = &opTweak;
+    tweakList["gExplore"] = &gExplore;
+    tweakList["tweak"] = &tweak;
+    tweakList["revTweak"] = &revTweak;
+    
+    if(tweakList.count(io["tweak"]) == 0)
+    {
+        cout << "Specify tweak correctly in io.txt" ;
+        exit(1);
+    }
+
 
     //THE ALGORITHM
-    HillClimbing<Indi> hc(exploit, eval, param[currentData], true, param["maxTime"]);
+    HillClimbing<Indi> hc(*tweakList[io["tweak"]], eval, param[currentData], true, param["maxTime"]);
     //SteepestAscent<Indi> sa(tweak,eval);
     //SteepestAscentWithReplacement<Indi> sar(tweak,eval);
     //SimulatedAnnealing<Indi> simAnn(tweak, eval, param["maxGen"]);
@@ -80,7 +100,7 @@ void hc(string currentData)
     //cout << "Final Solution:" << endl ;
     //initialSolution.print();
     //indiSave << initialSolution;
-    globalFinalResult << SERIAL_LOAD / initialSolution.fitness()<< " " << hc.totalTime<<endl;
+    globalFinalResult << SERIAL_LOAD / initialSolution.fitness() << " " << hc.totalTime << endl;
 
 }
 
@@ -104,7 +124,7 @@ void hcga(string currentData)
     //cout << "Final Solution:" << endl ;
     //initialSolution.print();
     //indiSave << initialSolution;
-    globalFinalResult << SERIAL_LOAD / initialSolution.fitness()<< " " << hcga.totalTime << endl;
+    globalFinalResult << SERIAL_LOAD / initialSolution.fitness() << " " << hcga.totalTime << endl;
 
 }
 
@@ -125,15 +145,34 @@ void ga(string currentData)
     MappingQuadCrossover<Indi> xover;
 
     //mutations
-    //GuidedMutation<Indi> explore;
     OptimisticTweak<Indi> opTweak;
     UniformMonCrossOver<Indi> exploit;
     Mutation<Indi> explore;
     GuidedMutation<Indi> gExplore;
+
     eoPropCombinedMonOp<Indi> tweak(opTweak, 0.2);
     tweak.add(exploit, 0.1, true);
     tweak.add(gExplore, 0.3, true);
     tweak.add(explore, 0.4, true);
+
+    eoPropCombinedMonOp<Indi> revTweak(opTweak, 0.3);
+    revTweak.add(exploit, 0.4, true);
+    revTweak.add(gExplore, 0.2, true);
+    revTweak.add(explore, 0.1, true);
+
+    map<string, eoMonOp<Indi>*> tweakList;
+    tweakList["exploit"] = &exploit;
+    tweakList["explore"] = &explore;
+    tweakList["opTweak"] = &opTweak;
+    tweakList["gExplore"] = &gExplore;
+    tweakList["tweak"] = &tweak;
+    tweakList["revTweak"] = &revTweak;
+    
+    if(tweakList.count(io["tweak"]) == 0)
+    {
+        cout << "Specify tweak correctly in io.txt" ;
+        exit(1);
+    }
 
     //termination
     eoGenContinue<Indi> continuator((time_t) param[currentData]);
@@ -167,7 +206,7 @@ void ga(string currentData)
     //    monitor.add(SecondStat);
 
     //THE ALGORITHM
-    ourGA <Indi> ga(select, xover, tweak, eval, checkpoint, fairRandom,param[currentData]);
+    ourGA <Indi> ga(select, xover, *tweakList[io["tweak"]], eval, checkpoint, fairRandom, param[currentData]);
     //HybridGA<Indi> hga(select, xover, tweak, eval, checkpoint, fairRandom, param["steadyGen"], (ACTORS + EDGES)*10);
     //GAforHC <Indi> ga(select, xover, explore, eval, param["hcIter"]);
 
@@ -213,7 +252,7 @@ void hga(string currentData)
 
     //Bismillah
     hga(pop);
-    globalFinalResult << SERIAL_LOAD / hga.Best.fitness()<< " " << hga.totalTime<< endl;
+    globalFinalResult << SERIAL_LOAD / hga.Best.fitness() << " " << hga.totalTime << endl;
 }
 
 int main(int argc, char** argv)

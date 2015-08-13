@@ -19,11 +19,11 @@ coolingRate 0.98
 hcSteadyGen 1000
 GAHCmaxGen 500
 GAHConverge 500
-totalExp 5
+totalExp 1
 DES 1
 FFT 2
 FMRadio	3
 MPEG 4
 Serpent	5
-TDE 6
+TDE 600000
 Vocoder	7
