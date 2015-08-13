@@ -32,13 +32,13 @@ public:
           eoMonOp<EOT>& _mutate,
           eoEvalFunc<EOT>& _eval,
           eoContinue<EOT>& _cont,
-          void (*_initializer)(EOT &))
+          void (*_initializer)(EOT &), int _maxGen)
     : cont(_cont),
     mutate(_mutate),
     cross(_cross),
     select(_select),
     eval(_eval),
-    initializer(_initializer)
+    initializer(_initializer), maxGen(_maxGen)
     {
         //best = NULL;
     }
@@ -104,11 +104,11 @@ public:
             genCount++;
             elapsedTime();
         }
-        while (passedTime < param["maxTime"]);
-        stat << genCount << " " << param["maxTime"] << " " << SERIAL_LOAD / Best.fitness() << endl;
+        while (passedTime < param["maxTime"] || genCount < maxGen);
+        stat << genCount << " " << passedTime << " " << SERIAL_LOAD / Best.fitness() << endl;
         //stat.close();
         cout << "Final sec:" << passedTime << " . Final speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
-        //return Best;
+        totalTime = passedTime;
     }
 
 private:
@@ -121,9 +121,11 @@ private:
     eoSelectPerc<EOT> select;
     eoEvalFunc<EOT>& eval;
     void (*initializer)(EOT &);
+    int maxGen;
 
 public:
     EOT Best;
+    double totalTime;
 
 };
 
@@ -141,13 +143,13 @@ public:
              eoMonOp<EOT>& _mutate,
              eoEvalFunc<EOT>& _eval,
              eoContinue<EOT>& _cont,
-             void (*_initializer)(EOT &), int _steadyGen, int _hcIter)
+             void (*_initializer)(EOT &), int _steadyGen, int _hcIter, int _maxGen)
     : cont(_cont),
     mutate(_mutate),
     cross(_cross),
     select(_select),
     eval(_eval),
-    initializer(_initializer), steadyGen(_steadyGen), hcIter(_hcIter)
+    initializer(_initializer), steadyGen(_steadyGen), hcIter(_hcIter), maxGen(_maxGen)
     {
     }
 
@@ -168,7 +170,7 @@ public:
         //        tweak.add(exploit, 0.3, true);
         //        tweak.add(gExplore, 0.2, true);
         //        tweak.add(explore, 0.1, true);
-        HillClimbing<EOT> hc(exploit, eval, hcIter, false,0);
+        HillClimbing<EOT> hc(exploit, eval, hcIter, false, 0);
         //SimulatedAnnealing<EOT> hc(exploit, eval, hcIter);
 
         //initialization
@@ -261,15 +263,15 @@ public:
             genCount++;
             elapsedTime();
         }
-        while (passedTime < param["maxTime"]);
+        while (passedTime < param["maxTime"] || genCount < maxGen);
         if (P.best_element() > Best)
         {
             Best = P.best_element();
         }
-        stat << genCount << " " <<param["maxTime"] << " " << SERIAL_LOAD / Best.fitness() << endl;
+        stat << genCount << " " << passedTime << " " << SERIAL_LOAD / Best.fitness() << endl;
         // stat.close();
         cout << "Final sec:" << passedTime << " . Final speedup,Fitness,avg,stdDev: " << SERIAL_LOAD / Best.fitness() << " , " << Best.fitness() << " , " << Best.avgLoad() << " , " << Best.stdDevLoad() << endl;
-        //return Best;
+        totalTime = passedTime;
     }
 
 private:
@@ -284,9 +286,11 @@ private:
     void (*initializer)(EOT &);
     int steadyGen;
     int hcIter;
+    int maxGen;
 
 public:
     EOT Best;
+    double totalTime;
 
 };
 
@@ -661,10 +665,10 @@ public:
             elapsedTime();
         }
         while (gen < maxGen || passedTime < param["maxTime"]);
-        stat << gen << " " << param["maxTime"] << " " << SERIAL_LOAD / S.fitness() << endl;
+        stat << gen << " " << passedTime << " " << SERIAL_LOAD / S.fitness() << endl;
         // stat.close();
         cout << endl << "Total Time:" << passedTime << endl;
-
+        totalTime = passedTime;
     }
 
 private:
@@ -673,6 +677,8 @@ private:
     // eoInvalidateQuadOp invalidates the embedded operator
     eoEvalFunc<EOT>& eval;
     int maxGen;
+public:
+    double totalTime;
 
 };
 #endif	/* GENETIC_ALGORITHM_H */

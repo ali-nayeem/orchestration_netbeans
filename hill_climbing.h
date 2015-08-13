@@ -56,11 +56,11 @@ public:
         while (passedTime < maxTime || gen < maxGen);
         if (saveStat)
         {
-            stat << gen << " " << maxTime << " " << SERIAL_LOAD / S.fitness() << endl;
+            stat << gen << " " << passedTime << " " << SERIAL_LOAD / S.fitness() << endl;
         }
         // stat.close();
         cout << endl << "Total Time:" << passedTime << endl;
-
+        totalTime = passedTime;
     }
 
 private:
@@ -71,6 +71,8 @@ private:
     int maxGen;
     bool saveStat;
     int maxTime;
+public:
+    double totalTime;
 
 };
 

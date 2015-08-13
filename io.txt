@@ -3,5 +3,5 @@ map mapping.csv
 stat stat.txt
 indi indi.txt
 indiLoad indiLoad.txt
-algo hga
+algo hcga
 #list hc-hcga-ga-hga

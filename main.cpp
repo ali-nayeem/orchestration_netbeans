@@ -30,7 +30,7 @@ typedef Mapping<MyFitT> Indi;
 /*
  *
  */
-void hc()
+void hc(string currentData)
 {
 
 
@@ -59,7 +59,7 @@ void hc()
     //HybridTweak<Indi> hybridTweak(exploit, explore);
 
     //THE ALGORITHM
-    HillClimbing<Indi> hc(exploit, eval, 0, true, param["maxTime"]);
+    HillClimbing<Indi> hc(exploit, eval, param[currentData], true, param["maxTime"]);
     //SteepestAscent<Indi> sa(tweak,eval);
     //SteepestAscentWithReplacement<Indi> sar(tweak,eval);
     //SimulatedAnnealing<Indi> simAnn(tweak, eval, param["maxGen"]);
@@ -80,11 +80,11 @@ void hc()
     //cout << "Final Solution:" << endl ;
     //initialSolution.print();
     //indiSave << initialSolution;
-    globalFinalResult << SERIAL_LOAD / initialSolution.fitness()<< endl;
+    globalFinalResult << SERIAL_LOAD / initialSolution.fitness()<< " " << hc.totalTime<<endl;
 
 }
 
-void hcga()
+void hcga(string currentData)
 {
     MappingEvalFunc<Indi> eval;
     //initial solution
@@ -94,7 +94,7 @@ void hcga()
     //tweaks
     UniformMonCrossOver<Indi> exploit;
     //THE ALGORITHM
-    HybridHillClimbing<Indi> hcga(exploit, eval, 0);
+    HybridHillClimbing<Indi> hcga(exploit, eval, param[currentData]);
     //In the name of Allah
     hcga(initialSolution);
     //final print
@@ -104,11 +104,11 @@ void hcga()
     //cout << "Final Solution:" << endl ;
     //initialSolution.print();
     //indiSave << initialSolution;
-    globalFinalResult << SERIAL_LOAD / initialSolution.fitness()<< endl;
+    globalFinalResult << SERIAL_LOAD / initialSolution.fitness()<< " " << hcga.totalTime << endl;
 
 }
 
-void ga()
+void ga(string currentData)
 {
     //fitness evaluators
     MappingEvalFunc<Indi> eval;
@@ -136,7 +136,7 @@ void ga()
     tweak.add(explore, 0.4, true);
 
     //termination
-    eoGenContinue<Indi> continuator((time_t) param["maxGen"]);
+    eoGenContinue<Indi> continuator((time_t) param[currentData]);
     //    //CHECKPOINT
     eoCheckPoint<Indi> checkpoint(continuator);
     //    // Create a counter parameter
@@ -167,16 +167,16 @@ void ga()
     //    monitor.add(SecondStat);
 
     //THE ALGORITHM
-    ourGA <Indi> ga(select, xover, tweak, eval, checkpoint, fairRandom);
+    ourGA <Indi> ga(select, xover, tweak, eval, checkpoint, fairRandom,param[currentData]);
     //HybridGA<Indi> hga(select, xover, tweak, eval, checkpoint, fairRandom, param["steadyGen"], (ACTORS + EDGES)*10);
     //GAforHC <Indi> ga(select, xover, explore, eval, param["hcIter"]);
 
     //Bismillah
     ga(pop);
-    globalFinalResult << SERIAL_LOAD / ga.Best.fitness()<< endl;
+    globalFinalResult << SERIAL_LOAD / ga.Best.fitness() << " " << ga.totalTime << endl;
 }
 
-void hga()
+void hga(string currentData)
 {
     //fitness evaluators
     MappingEvalFunc<Indi> eval;
@@ -204,16 +204,16 @@ void hga()
     tweak.add(explore, 0.4, true);
 
     //termination
-    eoGenContinue<Indi> continuator((time_t) param["maxGen"]);
+    eoGenContinue<Indi> continuator((time_t) param[io["input"]]);
     //    //CHECKPOINT
     eoCheckPoint<Indi> checkpoint(continuator);
 
     //THE ALGORITHM
-    HybridGA<Indi> hga(select, xover, tweak, eval, checkpoint, fairRandom, param["steadyGen"], (ACTORS + EDGES)*10);
+    HybridGA<Indi> hga(select, xover, tweak, eval, checkpoint, fairRandom, param["steadyGen"], (ACTORS + EDGES)*10, param[currentData]);
 
     //Bismillah
     hga(pop);
-    globalFinalResult << SERIAL_LOAD / hga.Best.fitness()<< endl;
+    globalFinalResult << SERIAL_LOAD / hga.Best.fitness()<< " " << hga.totalTime<< endl;
 }
 
 int main(int argc, char** argv)
@@ -223,6 +223,7 @@ int main(int argc, char** argv)
         //if (io[datasets[i]].compare("Y") == 0)
         // {
         io["input"] = datasets[i];
+        string currentData = datasets[i];
         gatherAllInfo();
         rng.reseed((uint32_t) param["seed"]);
         cout << "seed=" << (uint32_t) param["seed"] << endl;
@@ -230,19 +231,19 @@ int main(int argc, char** argv)
         {
             if (io["algo"].compare("hc") == 0)
             {
-                hc();
+                hc(currentData);
             }
             else if (io["algo"].compare("hcga") == 0)
             {
-                hcga();
+                hcga(currentData);
             }
             else if (io["algo"].compare("ga") == 0)
             {
-                ga();
+                ga(currentData);
             }
             else if (io["algo"].compare("hga") == 0)
             {
-                hga();
+                hga(currentData);
             }
             else
             {
