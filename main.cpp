@@ -79,7 +79,7 @@ void hc(string currentData)
 
 
     //THE ALGORITHM
-    HillClimbing<Indi> hc(*tweakList[io["tweak"]], eval, param[currentData], true, param["maxTime"]);
+    HillClimbing<Indi> hc(*tweakList[io["tweak"]], eval, param["hc_"+currentData], true, param["maxTime"]);
     //SteepestAscent<Indi> sa(tweak,eval);
     //SteepestAscentWithReplacement<Indi> sar(tweak,eval);
     //SimulatedAnnealing<Indi> simAnn(tweak, eval, param["maxGen"]);
@@ -114,7 +114,7 @@ void hcga(string currentData)
     //tweaks
     UniformMonCrossOver<Indi> exploit;
     //THE ALGORITHM
-    HybridHillClimbing<Indi> hcga(exploit, eval, param[currentData]);
+    HybridHillClimbing<Indi> hcga(exploit, eval, param["hcga_"+currentData]);
     //In the name of Allah
     hcga(initialSolution);
     //final print
@@ -175,7 +175,7 @@ void ga(string currentData)
     }
 
     //termination
-    eoGenContinue<Indi> continuator((time_t) param[currentData]);
+    eoGenContinue<Indi> continuator((time_t) param["ga_"+currentData]);
     //    //CHECKPOINT
     eoCheckPoint<Indi> checkpoint(continuator);
     //    // Create a counter parameter
@@ -206,7 +206,7 @@ void ga(string currentData)
     //    monitor.add(SecondStat);
 
     //THE ALGORITHM
-    ourGA <Indi> ga(select, xover, *tweakList[io["tweak"]], eval, checkpoint, fairRandom, param[currentData]);
+    ourGA <Indi> ga(select, xover, *tweakList[io["tweak"]], eval, checkpoint, fairRandom, param["ga_"+currentData]);
     //HybridGA<Indi> hga(select, xover, tweak, eval, checkpoint, fairRandom, param["steadyGen"], (ACTORS + EDGES)*10);
     //GAforHC <Indi> ga(select, xover, explore, eval, param["hcIter"]);
 
@@ -243,12 +243,12 @@ void hga(string currentData)
     tweak.add(explore, 0.4, true);
 
     //termination
-    eoGenContinue<Indi> continuator((time_t) param[io["input"]]);
+    eoGenContinue<Indi> continuator((time_t) param["hga_"+currentData]);
     //    //CHECKPOINT
     eoCheckPoint<Indi> checkpoint(continuator);
 
     //THE ALGORITHM
-    HybridGA<Indi> hga(select, xover, tweak, eval, checkpoint, fairRandom, param["steadyGen"], (ACTORS + EDGES)*10, param[currentData]);
+    HybridGA<Indi> hga(select, xover, tweak, eval, checkpoint, fairRandom, param["steadyGen"], (ACTORS + EDGES)*10, param["hga_"+currentData]);
 
     //Bismillah
     hga(pop);
