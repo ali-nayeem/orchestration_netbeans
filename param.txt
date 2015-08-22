@@ -41,10 +41,10 @@ hcga_MPEG 8645140
 hcga_Serpent 2828740
 hcga_TDE 7196255
 hcga_Vocoder 8633770
-hga_DES 92796 
+hga_DES 92800 
 hga_FFT 2130
 hga_FMRadio 450
 hga_MPEG 15450
 hga_Serpent 112920
 hga_TDE 533280
-hga_Vocoder 351850
+hga_Vocoder 346830
