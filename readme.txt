@@ -29,8 +29,9 @@ At first Follow the steps:
 3. Install Netbeans IDE 8.0 
 4. Install ParadisEO for Linux using Deb package found in http://paradiseo.gforge.inria.fr/index.php?n=Download.Download
 5. Then open the project orchestration from Netbeans IDE 8.0
-6. Resolve
+6. Resolve 
 
+You 
 There are 2 text files named io.txt and param.txt inside orchestration folder for specifying different parameters. 
 Parameters with default value(pSwap, pMut, seed ) are preceded by #.
 The most important parameter is rExploit in param.txt. 
