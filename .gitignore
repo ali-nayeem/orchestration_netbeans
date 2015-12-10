@@ -1,5 +1,7 @@
 build
 dist
+nbproject/*
+include/*
 .dep.inc
 *.exe
 *.[oa]
