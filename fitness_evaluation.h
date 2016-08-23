@@ -35,6 +35,7 @@ public:
         if (_eo.invalid())
         {
             // START Code of computation of fitness of the RouteSet object
+            fitEvalCount++;
             vector <double> load = vector<double>(PROCESSORS, 0);
             //vector <unsigned> modifiedProcList;
             for (unsigned actor = 0; actor < ACTORS; actor++)
