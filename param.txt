@@ -36,7 +36,7 @@ ga_TDE 615850
 ga_Vocoder 1418690
 hcga_DES 6932090
 hcga_FFT 6605940
-hcga_FMRadio 4320
+hcga_FMRadio 432000
 hcga_MPEG 8645140
 hcga_Serpent 2828740
 hcga_TDE 7196255
