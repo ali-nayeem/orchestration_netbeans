@@ -30,7 +30,7 @@ public:
      */
     void operator()(EOT & _eo)
     {
-        fitEvalCount++;
+        fitEvalCount++; //count all eval
         // test for invalid to avoid recomputing fitness of unmodified individuals
         if (_eo.invalid())
         {
