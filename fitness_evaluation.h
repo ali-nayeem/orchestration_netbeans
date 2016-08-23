@@ -14,6 +14,7 @@ class MappingEvalFunc : public eoEvalFunc<EOT>
 public:
     /// Ctor - no requirement
     // START eventually add or modify the anyVariable argument
+    static long int fitEvalCount;
 
     MappingEvalFunc()
     {
@@ -33,6 +34,7 @@ public:
         if (_eo.invalid())
         {
             // START Code of computation of fitness of the RouteSet object
+            fitEvalCount++;
             vector <double> load = vector<double>(PROCESSORS, 0);
             //vector <unsigned> modifiedProcList;
             for (unsigned actor = 0; actor < ACTORS; actor++)
@@ -65,6 +67,15 @@ public:
 
             //_eo.fitness(); 
         }
+    }
+    void static clearFitEvalCount()
+    {
+        fitEvalCount = 0;
+    }
+    
+    long int static getFitEvalCount()
+    {
+        return fitEvalCount;
     }
 
 private:

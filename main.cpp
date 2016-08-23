@@ -27,6 +27,8 @@ using namespace std;
 typedef eoMinimizingFitness MyFitT;
 typedef Mapping<MyFitT> Indi;
 
+template <class EOT>
+long int MappingEvalFunc<EOT>::fitEvalCount = 0;
 /*
  *
  */
@@ -261,6 +263,7 @@ int main(int argc, char** argv)
     {
         //if (io[datasets[i]].compare("Y") == 0)
         // {
+        MappingEvalFunc<Indi>::clearFitEvalCount();
         io["input"] = datasets[i];
         string currentData = datasets[i];
         gatherAllInfo();
@@ -290,6 +293,7 @@ int main(int argc, char** argv)
                 exit(1);
             }
         }
+        fitEvalStat << io["algo"] << " : "<< io["tweak"] << " : "<< datasets[i] << " : " << round(MappingEvalFunc<Indi>::getFitEvalCount()/param["totalExp"]);
         releaseAllInfo();
         //}
     }

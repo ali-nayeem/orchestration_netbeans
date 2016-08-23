@@ -14,7 +14,6 @@
 #define TOTAL_DATASETS 7
 string datasets[] = {"DES", "FFT", "FMRadio", "MPEG", "Serpent", "TDE", "Vocoder"};
 
-
 using namespace std;
 
 struct ActorLoad
@@ -39,6 +38,7 @@ double * EXECUTION_TIME, SERIAL_LOAD = 0.0, *ACTOR_LOAD;
 unsigned ACTORS, EDGES, PROCESSORS, *ACTOR_LIST;
 ofstream stat;
 ofstream globalFinalResult;
+ofstream fitEvalStat("fitEvalStat.txt");
 
 map<string, float> param; //list of parameters
 map<string, string> io; //list of io filenames
