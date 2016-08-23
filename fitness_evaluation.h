@@ -14,6 +14,7 @@ class MappingEvalFunc : public eoEvalFunc<EOT>
 public:
     /// Ctor - no requirement
     // START eventually add or modify the anyVariable argument
+    static long int fitEvalCount;
 
     MappingEvalFunc()
     {
@@ -29,6 +30,7 @@ public:
      */
     void operator()(EOT & _eo)
     {
+        fitEvalCount++;
         // test for invalid to avoid recomputing fitness of unmodified individuals
         if (_eo.invalid())
         {
@@ -65,6 +67,15 @@ public:
 
             //_eo.fitness(); 
         }
+    }
+    void static clearFitEvalCount()
+    {
+        fitEvalCount = 0;
+    }
+    
+    long int static getFitEvalCount()
+    {
+        return fitEvalCount;
     }
 
 private:
